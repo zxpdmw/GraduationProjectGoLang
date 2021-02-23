@@ -1,0 +1,3 @@
+安卓端 Java+Android Studio
+后端   GoLang+Gin+Gorm+GoLand
+数据库 MySql+Sqlite+Redis
