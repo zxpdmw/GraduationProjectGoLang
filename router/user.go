@@ -12,23 +12,35 @@ func login(context *gin.Context) {
 	var password = context.Query("password")
 	register := model.Login(username, password)
 	if register {
-		context.String(http.StatusOK, "true")
-	} else {
-		context.String(http.StatusOK, "false")
+		context.JSON(http.StatusOK, gin.H{
+			"code":    666,
+			"message": util.LoginSuccess,
+		})
 	}
+	context.JSON(http.StatusOK, gin.H{
+		"code":    555,
+		"message": util.LoginFail,
+	})
 }
 
 func register(context *gin.Context) {
 	var username = context.Query("username")
 	var nickname = context.Query("nickname")
 	var password = context.Query("password")
-	var houserid = context.Query("houseid")
-	login := model.Register(username, password, nickname, houserid)
+	var houseId = context.Query("houseId")
+	login := model.Register(username, password, nickname, houseId)
 	if login {
-		context.String(http.StatusOK, "true")
-	} else {
-		context.String(http.StatusOK, "false")
+		context.JSON(http.StatusOK, gin.H{
+			"code":    666,
+			"message": util.RegisterSuccess,
+		})
+		return
 	}
+	context.JSON(http.StatusOK, gin.H{
+		"code":    555,
+		"message": util.RegisterFail,
+	})
+
 }
 
 func editInfo(c *gin.Context) {
@@ -36,12 +48,18 @@ func editInfo(c *gin.Context) {
 	if err := c.ShouldBindJSON(&u); err != nil {
 		util.CheckError(err)
 	} else {
-		update := util.Db.Model(&model.User{}).Where("username=?", u.Username).Update("nickname", u.Nickname).Update("address", u.Address).Update("phone", u.Phone).Update("house_id", u.HouseId)
-		if update.RowsAffected == 1 {
-			c.String(200, "true")
-		} else {
-			c.String(200, "false")
+		info := model.EditInfo(u)
+		if info {
+			c.JSON(200, gin.H{
+				"code":    666,
+				"message": util.InfoSuccess,
+			})
+			return
 		}
+		c.JSON(200, gin.H{
+			"code":    555,
+			"message": util.InfoFail,
+		})
 	}
 }
 
@@ -50,27 +68,47 @@ func editPassword(c *gin.Context) {
 	if err := c.ShouldBindJSON(&u); err != nil {
 		util.CheckError(err)
 	} else {
-		update := util.Db.Model(&model.User{}).Where("username=?", u.Username).Update("password", u.Password)
-		if update.RowsAffected == 1 {
-			c.String(200, "true")
-		} else {
-			c.String(200, "false")
+		password := model.EditPassword(u)
+		if password {
+			c.JSON(200, gin.H{
+				"code":    666,
+				"message": util.PasswordSuccess,
+			})
+			return
 		}
+		c.JSON(200, gin.H{
+			"code":    555,
+			"message": util.PasswordFail,
+		})
 	}
-
 }
 
 func getInfo(c *gin.Context) {
-
+	query := c.Query("username")
+	info, userInfo := model.GetInfo(query)
+	if info {
+		c.JSON(http.StatusOK, util.CommonResult{
+			Code:    111,
+			Message: util.GetDataSuccess,
+			Data:    userInfo,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, util.CommonResult{
+		Code:    000,
+		Message: util.GetDataFail,
+		Data:    userInfo,
+	})
 }
 
 func UserRouters(engine *gin.Engine) {
 	group := engine.Group("/user")
 	{
+		group.GET("/getInfo", getInfo)
 		group.GET("/login", login)
 		group.GET("/register", register)
-		group.POST("/editinfo", editInfo)
-		group.POST("/editpassword", editPassword)
+		group.POST("/info", editInfo)
+		group.POST("/password", editPassword)
 	}
 
 }

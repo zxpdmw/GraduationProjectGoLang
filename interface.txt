@@ -1,3 +1,0 @@
-/user/login     登录接口      请求参数 username  password  响应 是否登录成功跳转系统页面
-/user/register  注册接口      请求参数 username  password houseid phone address nickname 响应 是否注册成功，回到登录页面
-/user/edit      修改休息接口   请求参数 username  要修改的信息

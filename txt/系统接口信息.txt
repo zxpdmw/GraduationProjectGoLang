@@ -1,0 +1,29 @@
+用户组接口
+/user/login         GET      登录接口      请求参数 username  password  响应 是否登录成功跳转系统页面
+/user/register      GET      注册接口      请求参数 username  password houseid phone address nickname 响应 是否注册成功，回到登录页面
+/user/info          POST  修改信息接口   请求参数 username  要修改的信息 XXXXXX
+/user/password      POST  修改密码接口   请求参数 username password
+
+公告接口
+/notice/recommend   GET  首页公告标题、简介、时间、创建人
+/notice/detail      GET  公告详细信息页面   请求参数 title
+/notice/publish     POST 发布公告信息   请求参数 title content publish_time publisher
+/notice/info        POST 修改公告信息   请求参数 title content publish_time publisher
+/notice/delete      GET 删除公告信息   请求参数 title
+
+物业费接口
+/property/
+
+
+投诉保修接口
+/tsbx/addcr         POST 添加投诉或者报修           请求参数 username type  message address phone
+/tsbx/getcr         GET  获取本人添加的投诉或者报修  请求参数 username
+
+家政服务接口
+/housekeeping/addhk POST 添加需要的家政服务          请求参数 hktype address phone
+/housekeeping/gethk GET  查看本人添加的家政服务
+
+房屋租赁接口
+/houserenting/
+
+
