@@ -15,6 +15,14 @@ type User struct {
 	//PropertyCosts float32 `json:"property_costs"`
 }
 
+type UserInfo struct {
+	Username string `json:"username"`
+	Nickname string `json:"nickname"`
+	HouseId  string `json:"house_id"`
+	Address  string `json:"address"`
+	Phone    string `json:"phone"`
+}
+
 func (User) TableName() string {
 	return "t_user"
 }
@@ -28,18 +36,18 @@ func Login(name string, password string) bool {
 	return true
 }
 
-func Register(name string, password string, nickname string, houseid string) bool {
+func Register(name string, password string, nickname string, houseId string) bool {
 	var u = User{
 		Username: name,
 		Password: password,
 		Nickname: nickname,
-		HouseId:  houseid,
+		HouseId:  houseId,
 	}
 	create := util.Db.Create(&u)
 	if create.RowsAffected == 1 {
-		id, f := GetPropertyByHouseId(houseid)
+		id, f := GetPropertyByHouseId(houseId)
 		if id {
-			util.Rdb.Set(houseid, f, 0)
+			util.Rdb.Set(houseId, f, 0)
 			return true
 		} else {
 			return false
@@ -50,6 +58,27 @@ func Register(name string, password string, nickname string, houseid string) boo
 	}
 }
 
-func EditInfo(address string, phone string) bool {
+func EditInfo(u User) bool {
+	update := util.Db.Model(&User{}).Where("username=?", u.Username).Update("nickname", u.Nickname).Update("address", u.Address).Update("phone", u.Phone).Update("house_id", u.HouseId)
+	if update.RowsAffected == 1 {
+		return true
+	}
 	return false
+}
+
+func EditPassword(u User) bool {
+	update := util.Db.Model(&User{}).Where("username=?", u.Username).Update("password", u.Password)
+	if update.RowsAffected == 1 {
+		return true
+	}
+	return false
+}
+
+func GetInfo(username string) (bool, UserInfo) {
+	var ui UserInfo
+	find := util.Db.Table("t_user").Select("username,nickname,house_id,address,phone").Where("username=?", username).Find(&ui)
+	if find.RowsAffected == 1 {
+		return true, ui
+	}
+	return false, ui
 }

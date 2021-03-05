@@ -1,0 +1,12 @@
+###
+POST http://localhost:80/user/editpassword
+Content-Type: application/json
+
+{"username": "zwy","password": "111"
+}
+
+###
+GET http://localhost:80/user/login?username=tww&password=111
+
+###
+
