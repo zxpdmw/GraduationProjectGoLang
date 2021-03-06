@@ -4,9 +4,9 @@ import "graduationproject/util"
 
 type Property struct {
 	ID      int     `json:"id" gorm:"primarykey"`
-	HouseID string  `json:"house_id"`
-	Amount  float32 `json:"amount"`
-	Address string  `json:"address"`
+	HouseID string  `json:"house_id"` //房屋ID
+	Amount  float32 `json:"amount"`   //物业费账户
+	Address string  `json:"address"`  //房屋地址
 }
 
 type result struct {

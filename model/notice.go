@@ -5,12 +5,13 @@ import (
 	"time"
 )
 
+//公告结构体
 type Notice struct {
 	ID          int       `json:"id" gorm:"primarykey"`
-	Publisher   string    `json:"publisher"`
-	Title       string    `json:"title"`
-	Content     string    `json:"content"`
-	PublishTime time.Time `json:"publish_time"`
+	Publisher   string    `json:"publisher"`    //公告发布者
+	Title       string    `json:"title"`        //公告发布标题
+	Content     string    `json:"content"`      //公告内容
+	PublishTime time.Time `json:"publish_time"` //公告发布时间
 }
 
 func (Notice) TableName() string {

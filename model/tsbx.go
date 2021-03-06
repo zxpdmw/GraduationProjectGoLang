@@ -1,13 +1,12 @@
 package model
 
-import (
-	"graduationproject/util"
-)
+import "graduationproject/util"
 
+//投诉报修结构体
 type TSBX struct {
 	ID       int    `json:"id" gorm:"primarykey"`
-	CRType   string `json:"cr_type"`
-	Status   string `json:"status"`
+	CRType   string `json:"cr_type"` //投诉 报修
+	Status   string `json:"status"`  //未处理 处理中 已处理
 	Address  string `json:"address"`
 	Phone    string `json:"phone"`
 	Message  string `json:"message"`
@@ -34,4 +33,13 @@ func GetTBByUsername(username string) []TSBX {
 	} else {
 		return nil
 	}
+}
+
+func GetAllCR() ([]TSBX, bool) {
+	var tbs []TSBX
+	find := util.Db.Table("t_tsbx").Find(&tbs)
+	if find.RowsAffected != 0 {
+		return tbs, true
+	}
+	return nil, false
 }

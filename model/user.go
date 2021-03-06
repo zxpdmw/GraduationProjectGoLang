@@ -1,8 +1,6 @@
 package model
 
-import (
-	"graduationproject/util"
-)
+import "graduationproject/util"
 
 type User struct {
 	ID       int    `json:"id" gorm:"primarykey"`

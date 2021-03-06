@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func login(context *gin.Context) {
+func userLogin(context *gin.Context) {
 	var username = context.Query("username")
 	var password = context.Query("password")
 	register := model.Login(username, password)
@@ -16,6 +16,7 @@ func login(context *gin.Context) {
 			"code":    666,
 			"message": util.LoginSuccess,
 		})
+		return
 	}
 	context.JSON(http.StatusOK, gin.H{
 		"code":    555,
@@ -23,7 +24,7 @@ func login(context *gin.Context) {
 	})
 }
 
-func register(context *gin.Context) {
+func userRegister(context *gin.Context) {
 	var username = context.Query("username")
 	var nickname = context.Query("nickname")
 	var password = context.Query("password")
@@ -43,7 +44,7 @@ func register(context *gin.Context) {
 
 }
 
-func editInfo(c *gin.Context) {
+func editUserInfo(c *gin.Context) {
 	var u model.User
 	if err := c.ShouldBindJSON(&u); err != nil {
 		util.CheckError(err)
@@ -63,7 +64,7 @@ func editInfo(c *gin.Context) {
 	}
 }
 
-func editPassword(c *gin.Context) {
+func editUserPassword(c *gin.Context) {
 	var u model.User
 	if err := c.ShouldBindJSON(&u); err != nil {
 		util.CheckError(err)
@@ -105,10 +106,9 @@ func UserRouters(engine *gin.Engine) {
 	group := engine.Group("/user")
 	{
 		group.GET("/getInfo", getInfo)
-		group.GET("/login", login)
-		group.GET("/register", register)
-		group.POST("/info", editInfo)
-		group.POST("/password", editPassword)
+		group.GET("/login", userLogin)
+		group.GET("/register", userRegister)
+		group.POST("/info", editUserInfo)
+		group.POST("/password", editUserPassword)
 	}
-
 }

@@ -8,7 +8,10 @@ import (
 
 func main() {
 	server := gin.Default()
-	server.StaticFile("/favicon", "https://zwyblog.oss-cn-beijing.aliyuncs.com/touxiang.jpg")
+	server.LoadHTMLGlob("templates/*")
+	server.StaticFile("/static", "./static")
+	server.StaticFile("/favicon", "./favicon.ico")
+	router.AdminRouters(server)
 	router.UserRouters(server)
 	router.NoticeRouters(server)
 	router.HousekeepingRouters(server)
