@@ -6,7 +6,7 @@ import (
 
 //管理员结构体
 type Admin struct {
-	Id       int    `json:"id" , gorm:"primarykey"`
+	Id       int    `json:"id" gorm:"primarykey"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 }

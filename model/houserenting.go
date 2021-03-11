@@ -16,6 +16,7 @@ func (HouseRent) TableName() string {
 	return "t_house_rent"
 }
 
+//获取全部租房信息
 func RentAll() ([]HouseRent, bool) {
 	var hrs []HouseRent
 	find := util.Db.Table("t_house_rent").Where("hr_type=?", "租").Find(&hrs)
@@ -25,6 +26,7 @@ func RentAll() ([]HouseRent, bool) {
 	return hrs, false
 }
 
+//获取全部售房信息
 func SaleAll() ([]HouseRent, bool) {
 	var hrs []HouseRent
 	find := util.Db.Table("t_house_rent").Where("hr_type=?", "售").Find(&hrs)
@@ -34,6 +36,7 @@ func SaleAll() ([]HouseRent, bool) {
 	return hrs, false
 }
 
+//获取全部租售房信息
 func RentSaleAll() ([]HouseRent, bool) {
 	var hrs []HouseRent
 	find := util.Db.Table("t_house_rent").Find(&hrs)
@@ -43,10 +46,18 @@ func RentSaleAll() ([]HouseRent, bool) {
 	return hrs, false
 }
 
+//删除租售房信息
 func Delete(id int) bool {
 	tx := util.Db.Table("t_house_rent").Model(&HouseRent{}).Where("id=?", id).Delete(&HouseRent{})
 	if tx.RowsAffected == 1 {
 		return true
 	}
 	return false
+}
+
+//发布房屋信息
+
+//修改房屋信息
+func EditHouseInfo() {
+
 }

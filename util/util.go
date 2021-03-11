@@ -37,8 +37,10 @@ const RentSaleSuccess = "获取房屋租售信息成功"
 const RentSaleFail = "获取房屋租售信息失败"
 const DeleteHouseSuccess = "删除房屋信息成功"
 const DeleteHouseFail = "删除房屋信息失败"
+const NoticeSuccess = "获取全部公告成功"
+const NoticeFail = "获取全部公告失败"
 
-type CommonResult struct {
+type Response struct {
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
@@ -49,9 +51,7 @@ var err error
 var Rdb *redis.Client
 
 func init() {
-
 	Db, err = gorm.Open(mysql.Open("zxpdmw:Zxpdmw520@tcp(rm-2zeqer8186x8o6hi9vo.mysql.rds.aliyuncs.com:3306)/graduationproject?parseTime=true&loc=Asia%2fShanghai"), &gorm.Config{})
-
 	Rdb = redis.NewClient(&redis.Options{
 		Addr:     "39.96.113.190:6379",
 		Password: "", // no password set

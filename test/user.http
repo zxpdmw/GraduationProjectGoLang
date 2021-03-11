@@ -1,0 +1,27 @@
+###
+GET http://localhost:80/admin/allnotice
+Accept: application/json
+
+###
+GET http://localhost:80//tsbx/getcr?username=zwy
+Accept: application/json
+
+###
+GET http://localhost:80/tsbx/getall
+Accept: application/json
+
+###
+###
+POST http://localhost:80/user/password
+Content-Type: application/json
+
+{"username": "zwy","password": "111"
+}
+
+###
+GET http://localhost:80/user/login?username=tww&password=111
+
+###
+
+
+

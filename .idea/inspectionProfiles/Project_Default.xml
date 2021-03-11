@@ -1,0 +1,18 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="GoUnreachableCode" enabled="true" level="INFORMATION" enabled_by_default="true" />
+    <inspection_tool class="GoUnusedConst" enabled="true" level="INFORMATION" enabled_by_default="true" />
+    <inspection_tool class="GoUnusedExportedFunction" enabled="true" level="INFORMATION" enabled_by_default="true" />
+    <inspection_tool class="GoUnusedExportedType" enabled="true" level="INFORMATION" enabled_by_default="true" />
+    <inspection_tool class="GoUnusedFunction" enabled="true" level="INFORMATION" enabled_by_default="true" />
+    <inspection_tool class="GoUnusedGlobalVariable" enabled="true" level="INFORMATION" enabled_by_default="true" />
+    <inspection_tool class="GoUnusedParameter" enabled="true" level="INFORMATION" enabled_by_default="true" />
+    <inspection_tool class="GoUnusedType" enabled="true" level="INFORMATION" enabled_by_default="true" />
+    <inspection_tool class="SpellCheckingInspection" enabled="true" level="INFORMATION" enabled_by_default="true">
+      <option name="processCode" value="true" />
+      <option name="processLiterals" value="true" />
+      <option name="processComments" value="true" />
+    </inspection_tool>
+  </profile>
+</component>

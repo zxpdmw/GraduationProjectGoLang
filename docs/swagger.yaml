@@ -1,0 +1,504 @@
+definitions:
+  model.Notice:
+    properties:
+      content:
+        description: 公告内容
+        type: string
+      id:
+        type: integer
+      publish_time:
+        description: 公告发布时间
+        type: string
+      publisher:
+        description: 公告发布者
+        type: string
+      title:
+        description: 公告发布标题
+        type: string
+    type: object
+  model.TSBX:
+    properties:
+      address:
+        type: string
+      cr_type:
+        description: 投诉 报修
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      phone:
+        type: string
+      status:
+        description: 未处理 处理中 已处理
+        type: string
+      username:
+        type: string
+    type: object
+  model.User:
+    properties:
+      address:
+        type: string
+      house_id:
+        type: string
+      id:
+        type: integer
+      nickname:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
+  util.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  license:
+    name: zwy
+  title: 社区便民服务接口
+  version: "1.0"
+paths:
+  /admin/cr:
+    get:
+      description: 获取全部的投诉报修信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: getAllComplainRepair
+      tags:
+      - 管理员模块
+  /admin/login:
+    get:
+      description: 管理员登录
+      parameters:
+      - description: 管理员账号
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 管理员密码
+        in: query
+        name: password
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: adminLogin
+      tags:
+      - 管理员模块
+  /admin/notice:
+    get:
+      description: 获取全部社区公告信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: getAllNotice
+      tags:
+      - 管理员模块
+  /houserentsale:
+    get:
+      description: 根据ID删除房屋
+      parameters:
+      - description: 房屋主键ID
+        in: query
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: DeleteHouseRentSale
+      tags:
+      - 房屋租售模块
+  /houserentsale/all:
+    get:
+      description: 获取全部的房屋信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: RentSale
+      tags:
+      - 房屋租售模块
+  /houserentsale/rent:
+    get:
+      description: 获取全部租房信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Rent
+      tags:
+      - 房屋租售模块
+  /houserentsale/sale:
+    get:
+      description: 获取全部的售房信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Sale
+      tags:
+      - 房屋租售模块
+  /notice/delete:
+    get:
+      description: 删除公告根据标题
+      parameters:
+      - description: 公告标题
+        in: query
+        name: title
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: deleteNotice
+      tags:
+      - 社区公告模块
+  /notice/detail:
+    get:
+      description: 获取公告的详细信息
+      parameters:
+      - description: 公告标题
+        in: query
+        name: title
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: detailNotice
+      tags:
+      - 社区公告模块
+  /notice/publish:
+    post:
+      description: 发布社区公告
+      parameters:
+      - description: Notice结构体
+        in: body
+        name: notice
+        required: true
+        schema:
+          $ref: '#/definitions/model.Notice'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: publishNotice
+      tags:
+      - 社区公告模块
+  /notice/recommend:
+    get:
+      description: 获取推荐公告，按发布时间最新排序
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: recommendNotice
+      tags:
+      - 社区公告模块
+  /property/get:
+    get:
+      description: 获取物业费
+      parameters:
+      - description: 房屋ID
+        in: query
+        name: houseId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: getProperty
+      tags:
+      - 物业费模块
+  /property/pay:
+    get:
+      description: 缴纳物业费
+      parameters:
+      - description: 房屋ID
+        in: query
+        name: houseId
+        required: true
+        type: string
+      - description: 缴纳金额
+        in: query
+        name: property
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: payProperty
+      tags:
+      - 物业费模块
+  /tsbx/add:
+    post:
+      description: 添加投诉报修
+      parameters:
+      - description: TSBX结构体
+        in: body
+        name: tb
+        required: true
+        schema:
+          $ref: '#/definitions/model.TSBX'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: addComplainRepair
+      tags:
+      - 投诉报修模块
+  /tsbx/all:
+    get:
+      description: 后天管理员获取全部的投诉报修
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: GetAllComplainRepair
+      tags:
+      - 投诉报修模块
+  /tsbx/get:
+    get:
+      description: 获取本人的投诉报修
+      parameters:
+      - description: 用户账号
+        in: query
+        name: username
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: getComplainRepairByUsername
+      tags:
+      - 投诉报修模块
+  /user/get:
+    get:
+      description: 获取用户信息根据username
+      parameters:
+      - description: 用户账户
+        in: query
+        name: username
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: getUserInfo
+      tags:
+      - 用户模块
+  /user/info:
+    post:
+      description: 修改用户信息
+      parameters:
+      - description: User结构体包含要修改的字段
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: editUserInfo
+      tags:
+      - 用户模块
+  /user/login:
+    get:
+      description: 用户使用账户和密码登录
+      parameters:
+      - description: 用户账户
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 用户密码
+        in: query
+        name: password
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: 用户登录
+      tags:
+      - 用户模块
+  /user/password:
+    post:
+      description: 修改用户密码
+      parameters:
+      - description: User结构体只包含username和password
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: editUserPassword
+      tags:
+      - 用户模块
+  /user/register:
+    get:
+      description: 用户输入在账号，密码，并绑定自己的房屋ID，昵称
+      parameters:
+      - description: 用户账户
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 用户密码
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: 用户昵称
+        in: query
+        name: nickname
+        required: true
+        type: string
+      - description: 房屋ID
+        in: query
+        name: houseId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: 用户注册
+      tags:
+      - 用户模块
+swagger: "2.0"

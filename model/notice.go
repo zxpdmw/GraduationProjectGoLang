@@ -18,6 +18,7 @@ func (Notice) TableName() string {
 	return "t_notice"
 }
 
+//获取推荐公告 按时间最新排序获取
 func RecommendNotice() (bool, []Notice) {
 	var n []Notice
 	find := util.Db.Order("publish_time desc").Find(&n)
@@ -27,6 +28,7 @@ func RecommendNotice() (bool, []Notice) {
 	return false, n
 }
 
+//获取公告详情
 func DetailNotice(title string) (bool, Notice) {
 	var n Notice
 	find := util.Db.Where("title=?", title).Find(&n)
@@ -36,6 +38,7 @@ func DetailNotice(title string) (bool, Notice) {
 	return false, n
 }
 
+//删除公告
 func DeleteNotice(title string) bool {
 	tx := util.Db.Where("title=?", title).Delete(&Notice{})
 	if tx.RowsAffected == 1 {
@@ -44,6 +47,7 @@ func DeleteNotice(title string) bool {
 	return false
 }
 
+//发布公告
 func PublishNotice(title string, content string, publisher string) bool {
 
 	var n = Notice{
@@ -61,4 +65,13 @@ func PublishNotice(title string, content string, publisher string) bool {
 
 func EditNotice() {
 
+}
+
+func GetAllNotice() ([]Notice, bool) {
+	var ns []Notice
+	find := util.Db.Find(&ns)
+	if find.RowsAffected == 0 {
+		return nil, false
+	}
+	return ns, true
 }

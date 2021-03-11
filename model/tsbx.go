@@ -17,6 +17,7 @@ func (TSBX) TableName() string {
 	return "t_tsbx"
 }
 
+//添加投诉报修
 func AddTB(tb TSBX) bool {
 	create := util.Db.Create(&tb)
 	if create.RowsAffected == 1 {
@@ -25,6 +26,7 @@ func AddTB(tb TSBX) bool {
 	return false
 }
 
+//获取user 添加的投诉保修
 func GetTBByUsername(username string) []TSBX {
 	var tbs []TSBX
 	find := util.Db.Where("username=?", username).Find(&tbs)
@@ -35,6 +37,7 @@ func GetTBByUsername(username string) []TSBX {
 	}
 }
 
+//管理员获取全部的投诉报修
 func GetAllCR() ([]TSBX, bool) {
 	var tbs []TSBX
 	find := util.Db.Table("t_tsbx").Find(&tbs)
