@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-//@Summary 用户登录
+//@Summary userLogin
 //@Description 用户使用账户和密码登录
 //@Tags 用户模块
 //@Param username query string true "用户账户"
@@ -18,49 +18,50 @@ import (
 func userLogin(context *gin.Context) {
 	var username = context.Query("username")
 	var password = context.Query("password")
-	register := model.Login(username, password)
-	if register {
+	err := model.Login(username, password)
+	if err != nil {
 		context.JSON(http.StatusOK, util.Response{
-			Code:    666,
-			Message: util.LoginSuccess,
+			Code:    555,
+			Message: util.RequestFail,
 			Data:    nil,
 		})
-		return
 	}
 	context.JSON(http.StatusOK, util.Response{
-		Code:    555,
-		Message: util.LoginFail,
+		Code:    666,
+		Message: util.LoginSuccess,
 		Data:    nil,
 	})
 }
 
-//@Summary 用户注册
+//@Summary userRegister
 //@Description 用户输入在账号，密码，并绑定自己的房屋ID，昵称
 //@Tags 用户模块
-//@Param username query string true "用户账户"
-//@Param password query string true "用户密码"
-//@Param nickname query string true "用户昵称"
-//@Param houseId query string true "房屋ID"
+//@Param userRegister body model.UserRegister true "用户注册结构体"
 //@Success 200 {object} util.Response
 //@Failure 500 {object} util.Response
 //@Router /user/register [get]
-func userRegister(context *gin.Context) {
-	var username = context.Query("username")
-	var nickname = context.Query("nickname")
-	var password = context.Query("password")
-	var houseId = context.Query("houseId")
-	login := model.Register(username, password, nickname, houseId)
-	if login {
-		context.JSON(http.StatusOK, util.Response{
-			Code:    666,
-			Message: util.RegisterSuccess,
+func userRegister(c *gin.Context) {
+	var ur model.UserRegister
+	if err := c.ShouldBindJSON(&ur); err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
 			Data:    nil,
 		})
 		return
 	}
-	context.JSON(http.StatusOK, util.Response{
-		Code:    555,
-		Message: util.RegisterFail,
+	err := model.Register(ur)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, util.Response{
+		Code:    666,
+		Message: util.RegisterSuccess,
 		Data:    nil,
 	})
 
@@ -76,23 +77,28 @@ func userRegister(context *gin.Context) {
 func editUserInfo(c *gin.Context) {
 	var u model.User
 	if err := c.ShouldBindJSON(&u); err != nil {
-		util.CheckError(err)
-	} else {
-		info := model.EditInfo(u)
-		if info {
-			c.JSON(200, util.Response{
-				Code:    666,
-				Message: util.InfoSuccess,
-				Data:    nil,
-			})
-			return
-		}
 		c.JSON(200, util.Response{
 			Code:    555,
-			Message: util.InfoFail,
+			Message: util.RequestFail,
 			Data:    nil,
 		})
+		return
 	}
+	err := model.EditInfo(u)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    555,
+		Message: util.InfoSuccess,
+		Data:    nil,
+	})
+
 }
 
 //@Summary editUserPassword
@@ -105,23 +111,26 @@ func editUserInfo(c *gin.Context) {
 func editUserPassword(c *gin.Context) {
 	var u model.User
 	if err := c.ShouldBindJSON(&u); err != nil {
-		util.CheckError(err)
-	} else {
-		password := model.EditPassword(u)
-		if password {
-			c.JSON(200, util.Response{
-				Code:    666,
-				Message: util.PasswordSuccess,
-				Data:    nil,
-			})
-			return
-		}
 		c.JSON(200, util.Response{
 			Code:    555,
-			Message: util.PasswordFail,
+			Message: util.RequestFail,
 			Data:    nil,
 		})
 	}
+	err := model.EditPassword(u)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.PasswordSuccess,
+		Data:    nil,
+	})
+
 }
 
 //@Summary getUserInfo
@@ -133,19 +142,19 @@ func editUserPassword(c *gin.Context) {
 //@Router /user/get [get]
 func getInfo(c *gin.Context) {
 	query := c.Query("username")
-	info, userInfo := model.GetInfo(query)
-	if info {
+	info, err := model.GetInfo(query)
+	if err != nil {
 		c.JSON(http.StatusOK, util.Response{
-			Code:    111,
-			Message: util.GetDataSuccess,
-			Data:    userInfo,
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    info,
 		})
 		return
 	}
 	c.JSON(http.StatusOK, util.Response{
-		Code:    000,
-		Message: util.GetDataFail,
-		Data:    userInfo,
+		Code:    666,
+		Message: util.GetDataSuccess,
+		Data:    info,
 	})
 }
 
@@ -154,7 +163,7 @@ func UserRouters(engine *gin.Engine) {
 	{
 		group.GET("/get", getInfo)
 		group.GET("/login", userLogin)
-		group.GET("/register", userRegister)
+		group.POST("/register", userRegister)
 		group.POST("/info", editUserInfo)
 		group.POST("/password", editUserPassword)
 	}

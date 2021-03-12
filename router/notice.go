@@ -26,19 +26,20 @@ func NoticeRouters(e *gin.Engine) {
 //@Failure 500 {object} util.Response
 //@Router /notice/recommend [get]
 func recommendNotice(c *gin.Context) {
-	notice, notices := model.RecommendNotice()
-	if notice {
+	data, err := model.RecommendNotice()
+	if err != nil {
 		c.JSON(http.StatusOK, util.Response{
-			Code:    666,
-			Message: util.RecommendNoticeSuccess,
-			Data:    notices,
+			Code:    555,
+			Message: util.RecommendNoticeFail,
+			Data:    data,
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, util.Response{
-		Code:    555,
-		Message: util.RecommendNoticeFail,
-		Data:    notices,
+		Code:    666,
+		Message: util.RecommendNoticeSuccess,
+		Data:    data,
 	})
 }
 
@@ -51,19 +52,19 @@ func recommendNotice(c *gin.Context) {
 //@Router /notice/detail [get]
 func detailNotice(c *gin.Context) {
 	query := c.Query("title")
-	notice, n := model.DetailNotice(query)
-	if notice {
+	data, err := model.DetailNotice(query)
+	if err != nil {
 		c.JSON(200, util.Response{
-			Code:    666,
-			Message: util.DetailNoticeSuccess,
-			Data:    n,
+			Code:    555,
+			Message: util.DetailNoticeFail,
+			Data:    data,
 		})
 		return
 	}
 	c.JSON(200, util.Response{
-		Code:    555,
-		Message: util.DetailNoticeFail,
-		Data:    n,
+		Code:    666,
+		Message: util.DetailNoticeSuccess,
+		Data:    data,
 	})
 }
 
@@ -76,7 +77,21 @@ func detailNotice(c *gin.Context) {
 //@Router /notice/delete [get]
 func deleteNotice(c *gin.Context) {
 	query := c.Query("title")
-	util.Db.Where("title=?", query).Delete(&model.Notice{})
+	err := model.DeleteNotice(query)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    nil,
+	})
 }
 
 //@Summary publishNotice
@@ -89,24 +104,25 @@ func deleteNotice(c *gin.Context) {
 func publishNotice(c *gin.Context) {
 	var n model.Notice
 	if err := c.ShouldBindJSON(&n); err != nil {
-		util.CheckError(err)
-	} else {
-		notice := model.PublishNotice(n.Title, n.Content, n.Publisher)
-		if notice {
-			c.JSON(200, gin.H{
-				"code":    666,
-				"message": util.PublishNoticeSuccess,
-			})
-			return
-		}
-		c.JSON(200, gin.H{
-			"code":    555,
-			"message": util.PublishNoticeFail,
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
 		})
 	}
-	c.JSON(200, gin.H{
-		"code":    555,
-		"message": util.RequestFail,
+	err := model.PublishNotice(n.Title, n.Content, n.Publisher)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    nil,
 	})
 }
 

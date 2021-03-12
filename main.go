@@ -16,8 +16,6 @@ import (
 func main() {
 	server := gin.Default()
 	server.LoadHTMLGlob("templates/*")
-	server.StaticFile("/static", "./static")
-	server.StaticFile("/favicon", "./favicon.ico")
 	url := ginSwagger.URL("http://localhost/swagger/doc.json")
 	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	router.AdminRouters(server)

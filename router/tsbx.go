@@ -11,7 +11,6 @@ func ComplainRepairRouters(e *gin.Engine) {
 	{
 		group.POST("/add", addComplainRepair)
 		group.GET("/get", getComplainRepairByUsername)
-		group.GET("/all", GetAllComplainRepair)
 	}
 
 }
@@ -28,17 +27,19 @@ func addComplainRepair(c *gin.Context) {
 	if err := c.ShouldBindJSON(&tb); err != nil {
 		util.CheckError(err)
 	}
-	add := model.AddTB(tb)
-	if add {
-		c.JSON(200, gin.H{
-			"code":    666,
-			"message": util.ComplainRepairSuccess,
+	err := model.AddTB(tb)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.ComplainRepairFail,
+			Data:    nil,
 		})
 		return
 	}
-	c.JSON(200, gin.H{
-		"code":    555,
-		"message": util.ComplainRepairFail,
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.ComplainRepairSuccess,
+		Data:    nil,
 	})
 }
 
@@ -51,42 +52,19 @@ func addComplainRepair(c *gin.Context) {
 //@Router /tsbx/get [get]
 func getComplainRepairByUsername(c *gin.Context) {
 	query := c.Query("username")
-	username := model.GetTBByUsername(query)
-	if username != nil {
+	data, err := model.GetTBByUsername(query)
+	if err != nil {
 		c.JSON(200, util.Response{
-			Code:    1,
-			Message: util.GetDataSuccess,
-			Data:    username,
+			Code:    555,
+			Message: util.GetDataFail,
+			Data:    nil,
 		})
 		return
 	}
 	c.JSON(200, util.Response{
-		Code:    0,
-		Message: util.GetDataFail,
-		Data:    nil,
+		Code:    666,
+		Message: util.GetDataSuccess,
+		Data:    data,
 	})
 
-}
-
-//@Summary GetAllComplainRepair
-//@Tags 投诉报修模块
-//@Description 后天管理员获取全部的投诉报修
-//@Success 200 {object} util.Response
-//@Failure 500 {object} util.Response
-//@Router /tsbx/all [get]
-func GetAllComplainRepair(c *gin.Context) {
-	cr, b := model.GetAllCR()
-	if b {
-		c.JSON(200, util.Response{
-			Code:    666,
-			Message: util.RequestSuccess,
-			Data:    cr,
-		})
-		return
-	}
-	c.JSON(200, util.Response{
-		Code:    555,
-		Message: util.RequestFail,
-		Data:    nil,
-	})
 }

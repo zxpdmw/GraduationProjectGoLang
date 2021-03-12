@@ -24,19 +24,19 @@ func PropertyRouters(e *gin.Engine) {
 //@Router /property/get [get]
 func getProperty(c *gin.Context) {
 	query := c.Query("houseId")
-	id, f := model.GetPropertyByHouseId(query)
-	if id {
+	data, err := model.GetPropertyByHouseId(query)
+	if err != nil {
 		c.JSON(200, util.Response{
-			Code:    666,
-			Message: util.GetDataSuccess,
-			Data:    f,
+			Code:    555,
+			Message: util.GetDataFail,
+			Data:    nil,
 		})
 		return
 	}
 	c.JSON(200, util.Response{
-		Code:    555,
-		Message: util.GetDataFail,
-		Data:    nil,
+		Code:    666,
+		Message: util.GetDataSuccess,
+		Data:    data,
 	})
 }
 
@@ -51,19 +51,27 @@ func getProperty(c *gin.Context) {
 func payProperty(c *gin.Context) {
 	query := c.Query("houseId")
 	s := c.Query("property")
-	float, err := strconv.ParseFloat(s, 10)
-	util.CheckError(err)
-	property := model.PayProperty(float32(float), query)
-	if property {
-		c.JSON(200, gin.H{
-			"code":    666,
-			"message": util.PropertySuccess,
+	data, err := strconv.ParseFloat(s, 10)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.PropertyFail,
+			Data:    nil,
+		})
+	}
+	err = model.PayProperty(float32(data), query)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.PropertyFail,
+			Data:    nil,
 		})
 		return
 	}
-	c.JSON(200, gin.H{
-		"code":    555,
-		"message": util.PropertyFail,
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.PropertySuccess,
+		Data:    data,
 	})
 }
 

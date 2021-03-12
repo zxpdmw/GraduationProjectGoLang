@@ -11,8 +11,9 @@ func AdminRouters(e *gin.Engine) {
 	{
 		group.GET("/", indexPage)
 		group.GET("login", adminLogin)
-		group.GET("/cr", getAllCR)
 		group.GET("/notice", getAllNotice)
+		group.GET("/housekeeping", getAllHouseKeeping)
+		group.GET("/tsbx", getAllComplainRepair)
 	}
 }
 
@@ -31,35 +32,13 @@ func indexPage(c *gin.Context) {
 func adminLogin(c *gin.Context) {
 	query := c.Query("username")
 	s := c.Query("password")
-	login := model.AdminLogin(query, s)
-	if login {
-		c.HTML(200, "main.gohtml", gin.H{"message": "登录成功"})
+	err := model.AdminLogin(query, s)
+	if err != nil {
+		c.HTML(200, "login.gohtml", gin.H{"message": "密码错误"})
 		return
 	}
-	c.HTML(200, "login.gohtml", gin.H{"message": "密码错误"})
-}
+	c.HTML(200, "main.gohtml", gin.H{"message": "登录成功"})
 
-//@Summary getAllComplainRepair
-//@Tags 管理员模块
-//@Description 获取全部的投诉报修信息
-//@Success 200 {object} util.Response
-//@Failure 500 {object} util.Response
-//@Router /admin/cr [get]
-func getAllCR(c *gin.Context) {
-	cr, b := model.GetAllCR()
-	if b {
-		c.JSON(200, util.Response{
-			Code:    666,
-			Message: util.ComplainRepairSuccess,
-			Data:    cr,
-		})
-		return
-	}
-	c.JSON(200, util.Response{
-		Code:    555,
-		Message: util.ComplainRepairFail,
-		Data:    nil,
-	})
 }
 
 //@Summary getAllNotice
@@ -69,19 +48,65 @@ func getAllCR(c *gin.Context) {
 //@Failure 500 {object} util.Response
 //@Router /admin/notice [get]
 func getAllNotice(c *gin.Context) {
-	notice, b := model.GetAllNotice()
-	if b {
+	data, err := model.GetAllNotice()
+	if err != nil {
 		c.JSON(200, util.Response{
-			Code:    666,
-			Message: util.NoticeSuccess,
-			Data:    notice,
+			Code:    555,
+			Message: util.NoticeFail,
+			Data:    nil,
 		})
 		return
 	}
 	c.JSON(200, util.Response{
-		Code:    555,
-		Message: util.NoticeFail,
-		Data:    nil,
+		Code:    666,
+		Message: util.NoticeSuccess,
+		Data:    data,
 	})
 
+}
+
+//@Summary gtAllComplainRepair
+//@Tags 管理员模块
+//@Description 后台管理员获取全部的投诉报修
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /admin/tsbx [get]
+func getAllComplainRepair(c *gin.Context) {
+	data, err := model.GetAllCR()
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    data,
+	})
+
+}
+
+//@Summary getAllHouseKeeping
+//@Tags 管理员模块
+//@Description 获取全部的家政服务请求
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /admin/housekeeping [get]
+func getAllHouseKeeping(c *gin.Context) {
+	data, err := model.GetAllHouseKeeping()
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    data,
+		})
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    data,
+	})
 }

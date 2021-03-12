@@ -27,13 +27,13 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/cr": {
+        "/admin/housekeeping": {
             "get": {
-                "description": "获取全部的投诉报修信息",
+                "description": "获取全部的家政服务请求",
                 "tags": [
                     "管理员模块"
                 ],
-                "summary": "getAllComplainRepair",
+                "summary": "getAllHouseKeeping",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -112,7 +112,119 @@ var doc = `{
                 }
             }
         },
-        "/houserentsale": {
+        "/admin/tsbx": {
+            "get": {
+                "description": "后台管理员获取全部的投诉报修",
+                "tags": [
+                    "管理员模块"
+                ],
+                "summary": "gtAllComplainRepair",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/housekeeping/add": {
+            "post": {
+                "description": "添加一个家政服务请求",
+                "tags": [
+                    "家政服务模块"
+                ],
+                "summary": "addHouseKeeping",
+                "parameters": [
+                    {
+                        "description": "家政服务结构体",
+                        "name": "houseKeeping",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.HouseKeeping"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/housekeeping/get": {
+            "get": {
+                "description": "获取每个人申请的家政服务",
+                "tags": [
+                    "家政服务模块"
+                ],
+                "summary": "getHouseKeepingByUsername",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/houserentsale/all": {
+            "get": {
+                "description": "获取全部的房屋信息",
+                "tags": [
+                    "房屋租售模块"
+                ],
+                "summary": "RentSale",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/houserentsale/delete": {
             "get": {
                 "description": "根据ID删除房屋",
                 "tags": [
@@ -144,13 +256,58 @@ var doc = `{
                 }
             }
         },
-        "/houserentsale/all": {
-            "get": {
-                "description": "获取全部的房屋信息",
+        "/houserentsale/edit": {
+            "post": {
+                "description": "修改房屋信息",
                 "tags": [
                     "房屋租售模块"
                 ],
-                "summary": "RentSale",
+                "summary": "editHouse",
+                "parameters": [
+                    {
+                        "description": "修改房屋信息结构体",
+                        "name": "editHouse",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.EditHouse"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/houserentsale/publish": {
+            "post": {
+                "description": "发布房屋租售信息",
+                "tags": [
+                    "房屋租售模块"
+                ],
+                "summary": "publishHouse",
+                "parameters": [
+                    {
+                        "description": "房屋租售结构体",
+                        "name": "houseRent",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.HouseRentSale"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -439,29 +596,6 @@ var doc = `{
                 }
             }
         },
-        "/tsbx/all": {
-            "get": {
-                "description": "后天管理员获取全部的投诉报修",
-                "tags": [
-                    "投诉报修模块"
-                ],
-                "summary": "GetAllComplainRepair",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/tsbx/get": {
             "get": {
                 "description": "获取本人的投诉报修",
@@ -566,7 +700,7 @@ var doc = `{
                 "tags": [
                     "用户模块"
                 ],
-                "summary": "用户登录",
+                "summary": "userLogin",
                 "parameters": [
                     {
                         "type": "string",
@@ -639,35 +773,16 @@ var doc = `{
                 "tags": [
                     "用户模块"
                 ],
-                "summary": "用户注册",
+                "summary": "userRegister",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "用户账户",
-                        "name": "username",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户密码",
-                        "name": "password",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户昵称",
-                        "name": "nickname",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "房屋ID",
-                        "name": "houseId",
-                        "in": "query",
-                        "required": true
+                        "description": "用户注册结构体",
+                        "name": "userRegister",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserRegister"
+                        }
                     }
                 ],
                 "responses": {
@@ -688,6 +803,98 @@ var doc = `{
         }
     },
     "definitions": {
+        "model.EditHouse": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "房屋地址",
+                    "type": "string"
+                },
+                "hr_type": {
+                    "description": "房屋类型 租还是售",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "message": {
+                    "description": "房屋信息",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "联系方式",
+                    "type": "string"
+                },
+                "price": {
+                    "description": "房屋价格",
+                    "type": "string"
+                },
+                "publisher": {
+                    "description": "发布者",
+                    "type": "string"
+                }
+            }
+        },
+        "model.HouseKeeping": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "地址",
+                    "type": "string"
+                },
+                "hk_type": {
+                    "description": "家政服务类型",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "phone": {
+                    "description": "联系方式",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "服务状态",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户账户",
+                    "type": "string"
+                }
+            }
+        },
+        "model.HouseRentSale": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "房屋地址",
+                    "type": "string"
+                },
+                "hr_type": {
+                    "description": "房屋类型 租还是售",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "message": {
+                    "description": "房屋信息",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "联系方式",
+                    "type": "string"
+                },
+                "price": {
+                    "description": "房屋价格",
+                    "type": "string"
+                },
+                "publisher": {
+                    "description": "发布者",
+                    "type": "string"
+                }
+            }
+        },
         "model.Notice": {
             "type": "object",
             "properties": {
@@ -716,6 +923,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "address": {
+                    "description": "投诉报修者地址",
                     "type": "string"
                 },
                 "cr_type": {
@@ -726,9 +934,11 @@ var doc = `{
                     "type": "integer"
                 },
                 "message": {
+                    "description": "投诉报修详细信息",
                     "type": "string"
                 },
                 "phone": {
+                    "description": "投诉报修者电话",
                     "type": "string"
                 },
                 "status": {
@@ -736,6 +946,7 @@ var doc = `{
                     "type": "string"
                 },
                 "username": {
+                    "description": "投诉报修者账户",
                     "type": "string"
                 }
             }
@@ -744,24 +955,51 @@ var doc = `{
             "type": "object",
             "properties": {
                 "address": {
+                    "description": "用户地址",
                     "type": "string"
                 },
                 "house_id": {
+                    "description": "房屋ID",
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
                 "nickname": {
+                    "description": "用户昵称",
                     "type": "string"
                 },
                 "password": {
+                    "description": "用户密码",
                     "type": "string"
                 },
                 "phone": {
+                    "description": "用户电话",
                     "type": "string"
                 },
                 "username": {
+                    "description": "用户账号",
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserRegister": {
+            "type": "object",
+            "properties": {
+                "house_id": {
+                    "description": "房屋ID",
+                    "type": "string"
+                },
+                "nickname": {
+                    "description": "用户昵称",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "用户密码",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户账号",
                     "type": "string"
                 }
             }

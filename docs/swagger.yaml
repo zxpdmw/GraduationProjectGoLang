@@ -1,4 +1,70 @@
 definitions:
+  model.EditHouse:
+    properties:
+      address:
+        description: 房屋地址
+        type: string
+      hr_type:
+        description: 房屋类型 租还是售
+        type: string
+      id:
+        type: string
+      message:
+        description: 房屋信息
+        type: string
+      phone:
+        description: 联系方式
+        type: string
+      price:
+        description: 房屋价格
+        type: string
+      publisher:
+        description: 发布者
+        type: string
+    type: object
+  model.HouseKeeping:
+    properties:
+      address:
+        description: 地址
+        type: string
+      hk_type:
+        description: 家政服务类型
+        type: string
+      id:
+        type: integer
+      phone:
+        description: 联系方式
+        type: string
+      status:
+        description: 服务状态
+        type: string
+      username:
+        description: 用户账户
+        type: string
+    type: object
+  model.HouseRentSale:
+    properties:
+      address:
+        description: 房屋地址
+        type: string
+      hr_type:
+        description: 房屋类型 租还是售
+        type: string
+      id:
+        type: integer
+      message:
+        description: 房屋信息
+        type: string
+      phone:
+        description: 联系方式
+        type: string
+      price:
+        description: 房屋价格
+        type: string
+      publisher:
+        description: 发布者
+        type: string
+    type: object
   model.Notice:
     properties:
       content:
@@ -19,6 +85,7 @@ definitions:
   model.TSBX:
     properties:
       address:
+        description: 投诉报修者地址
         type: string
       cr_type:
         description: 投诉 报修
@@ -26,30 +93,54 @@ definitions:
       id:
         type: integer
       message:
+        description: 投诉报修详细信息
         type: string
       phone:
+        description: 投诉报修者电话
         type: string
       status:
         description: 未处理 处理中 已处理
         type: string
       username:
+        description: 投诉报修者账户
         type: string
     type: object
   model.User:
     properties:
       address:
+        description: 用户地址
         type: string
       house_id:
+        description: 房屋ID
         type: string
       id:
         type: integer
       nickname:
+        description: 用户昵称
         type: string
       password:
+        description: 用户密码
         type: string
       phone:
+        description: 用户电话
         type: string
       username:
+        description: 用户账号
+        type: string
+    type: object
+  model.UserRegister:
+    properties:
+      house_id:
+        description: 房屋ID
+        type: string
+      nickname:
+        description: 用户昵称
+        type: string
+      password:
+        description: 用户密码
+        type: string
+      username:
+        description: 用户账号
         type: string
     type: object
   util.Response:
@@ -68,9 +159,9 @@ info:
   title: 社区便民服务接口
   version: "1.0"
 paths:
-  /admin/cr:
+  /admin/housekeeping:
     get:
-      description: 获取全部的投诉报修信息
+      description: 获取全部的家政服务请求
       responses:
         "200":
           description: OK
@@ -80,7 +171,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/util.Response'
-      summary: getAllComplainRepair
+      summary: getAllHouseKeeping
       tags:
       - 管理员模块
   /admin/login:
@@ -124,7 +215,80 @@ paths:
       summary: getAllNotice
       tags:
       - 管理员模块
-  /houserentsale:
+  /admin/tsbx:
+    get:
+      description: 后台管理员获取全部的投诉报修
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: gtAllComplainRepair
+      tags:
+      - 管理员模块
+  /housekeeping/add:
+    post:
+      description: 添加一个家政服务请求
+      parameters:
+      - description: 家政服务结构体
+        in: body
+        name: houseKeeping
+        required: true
+        schema:
+          $ref: '#/definitions/model.HouseKeeping'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: addHouseKeeping
+      tags:
+      - 家政服务模块
+  /housekeeping/get:
+    get:
+      description: 获取每个人申请的家政服务
+      parameters:
+      - description: 用户名
+        in: query
+        name: username
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: getHouseKeepingByUsername
+      tags:
+      - 家政服务模块
+  /houserentsale/all:
+    get:
+      description: 获取全部的房屋信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: RentSale
+      tags:
+      - 房屋租售模块
+  /houserentsale/delete:
     get:
       description: 根据ID删除房屋
       parameters:
@@ -145,9 +309,16 @@ paths:
       summary: DeleteHouseRentSale
       tags:
       - 房屋租售模块
-  /houserentsale/all:
-    get:
-      description: 获取全部的房屋信息
+  /houserentsale/edit:
+    post:
+      description: 修改房屋信息
+      parameters:
+      - description: 修改房屋信息结构体
+        in: body
+        name: editHouse
+        required: true
+        schema:
+          $ref: '#/definitions/model.EditHouse'
       responses:
         "200":
           description: OK
@@ -157,7 +328,29 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/util.Response'
-      summary: RentSale
+      summary: editHouse
+      tags:
+      - 房屋租售模块
+  /houserentsale/publish:
+    post:
+      description: 发布房屋租售信息
+      parameters:
+      - description: 房屋租售结构体
+        in: body
+        name: houseRent
+        required: true
+        schema:
+          $ref: '#/definitions/model.HouseRentSale'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: publishHouse
       tags:
       - 房屋租售模块
   /houserentsale/rent:
@@ -338,21 +531,6 @@ paths:
       summary: addComplainRepair
       tags:
       - 投诉报修模块
-  /tsbx/all:
-    get:
-      description: 后天管理员获取全部的投诉报修
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/util.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/util.Response'
-      summary: GetAllComplainRepair
-      tags:
-      - 投诉报修模块
   /tsbx/get:
     get:
       description: 获取本人的投诉报修
@@ -440,7 +618,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/util.Response'
-      summary: 用户登录
+      summary: userLogin
       tags:
       - 用户模块
   /user/password:
@@ -469,26 +647,12 @@ paths:
     get:
       description: 用户输入在账号，密码，并绑定自己的房屋ID，昵称
       parameters:
-      - description: 用户账户
-        in: query
-        name: username
+      - description: 用户注册结构体
+        in: body
+        name: userRegister
         required: true
-        type: string
-      - description: 用户密码
-        in: query
-        name: password
-        required: true
-        type: string
-      - description: 用户昵称
-        in: query
-        name: nickname
-        required: true
-        type: string
-      - description: 房屋ID
-        in: query
-        name: houseId
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/model.UserRegister'
       responses:
         "200":
           description: OK
@@ -498,7 +662,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/util.Response'
-      summary: 用户注册
+      summary: userRegister
       tags:
       - 用户模块
 swagger: "2.0"

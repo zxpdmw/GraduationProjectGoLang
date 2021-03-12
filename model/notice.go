@@ -19,36 +19,35 @@ func (Notice) TableName() string {
 }
 
 //获取推荐公告 按时间最新排序获取
-func RecommendNotice() (bool, []Notice) {
-	var n []Notice
-	find := util.Db.Order("publish_time desc").Find(&n)
-	if find.RowsAffected != 0 {
-		return true, n
+func RecommendNotice() (data []Notice, err error) {
+	find := util.Db.Order("publish_time desc").Find(&data).Error
+	if find != nil {
+		return
 	}
-	return false, n
+	return
 }
 
 //获取公告详情
-func DetailNotice(title string) (bool, Notice) {
-	var n Notice
-	find := util.Db.Where("title=?", title).Find(&n)
-	if find.RowsAffected == 1 {
-		return true, n
+func DetailNotice(title string) (data Notice, err error) {
+
+	find := util.Db.Where("title=?", title).Find(&data).Error
+	if find != nil {
+		return
 	}
-	return false, n
+	return
 }
 
 //删除公告
-func DeleteNotice(title string) bool {
-	tx := util.Db.Where("title=?", title).Delete(&Notice{})
-	if tx.RowsAffected == 1 {
-		return true
+func DeleteNotice(title string) (err error) {
+	tx := util.Db.Where("title=?", title).Delete(&Notice{}).Error
+	if tx != nil {
+		return
 	}
-	return false
+	return
 }
 
 //发布公告
-func PublishNotice(title string, content string, publisher string) bool {
+func PublishNotice(title, content, publisher string) (err error) {
 
 	var n = Notice{
 		Publisher:   publisher,
@@ -56,22 +55,21 @@ func PublishNotice(title string, content string, publisher string) bool {
 		Content:     content,
 		PublishTime: time.Now(),
 	}
-	create := util.Db.Create(&n)
-	if create.RowsAffected == 1 {
-		return true
+	err = util.Db.Create(&n).Error
+	if err != nil {
+		return
 	}
-	return false
+	return
 }
 
 func EditNotice() {
 
 }
 
-func GetAllNotice() ([]Notice, bool) {
-	var ns []Notice
-	find := util.Db.Find(&ns)
-	if find.RowsAffected == 0 {
-		return nil, false
+func GetAllNotice() (data []Notice, err error) {
+	find := util.Db.Find(&data).Error
+	if find != nil {
+		return
 	}
-	return ns, true
+	return
 }

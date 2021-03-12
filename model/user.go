@@ -4,79 +4,87 @@ import "graduationproject/util"
 
 type User struct {
 	ID       int    `json:"id" gorm:"primarykey"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Nickname string `json:"nickname"`
-	HouseId  string `json:"house_id"`
-	Address  string `json:"address"`
-	Phone    string `json:"phone"`
-	//PropertyCosts float32 `json:"property_costs"`
+	Username string `json:"username"` //用户账号
+	Password string `json:"password"` //用户密码
+	Nickname string `json:"nickname"` //用户昵称
+	HouseId  string `json:"house_id"` //房屋ID
+	Address  string `json:"address"`  //用户地址
+	Phone    string `json:"phone"`    //用户电话
+}
+
+type UserRegister struct {
+	Username string `json:"username"` //用户账号
+	Password string `json:"password"` //用户密码
+	Nickname string `json:"nickname"` //用户昵称
+	HouseId  string `json:"house_id"` //房屋ID
 }
 
 type UserInfo struct {
-	Username string `json:"username"`
-	Nickname string `json:"nickname"`
-	HouseId  string `json:"house_id"`
-	Address  string `json:"address"`
-	Phone    string `json:"phone"`
+	Username string `json:"username"` //用户账号
+	Nickname string `json:"nickname"` //用户昵称
+	HouseId  string `json:"house_id"` //房屋ID
+	Address  string `json:"address"`  //用户地址
+	Phone    string `json:"phone"`    //用户电话
 }
 
 func (User) TableName() string {
 	return "t_user"
 }
 
-func Login(name string, password string) bool {
-	var u User
-	util.Db.Where("username=? and password=? ", name, password).Find(&u)
-	if u.Username != name || u.Password != password {
-		return false
+func Login(name, password string) (err error) {
+	var user User
+	err = util.Db.Where("username=? and password=? ", name, password).Find(&user).Error
+	if err != nil {
+		return
 	}
-	return true
+	if user.Username != name || user.Password != password {
+		return
+	}
+	return
 }
 
-func Register(name string, password string, nickname string, houseId string) bool {
+func Register(register UserRegister) (err error) {
 	var u = User{
-		Username: name,
-		Password: password,
-		Nickname: nickname,
-		HouseId:  houseId,
+		Username: register.Username,
+		Password: register.Password,
+		Nickname: register.Nickname,
+		HouseId:  register.HouseId,
 	}
-	create := util.Db.Create(&u)
-	if create.RowsAffected == 1 {
-		id, f := GetPropertyByHouseId(houseId)
-		if id {
-			util.Rdb.Set(houseId, f, 0)
-			return true
-		} else {
-			return false
-		}
-		return true
-	} else {
-		return false
+	err = util.Db.Create(&u).Error
+	if err != nil {
+		return
 	}
+	_, f := GetPropertyByHouseId(register.HouseId)
+	if f != nil {
+		return
+	}
+	//util.Rdb.Set(register.HouseId, id, 0)
+	return
 }
 
-func EditInfo(u User) bool {
-	update := util.Db.Model(&User{}).Where("username=?", u.Username).Update("nickname", u.Nickname).Update("address", u.Address).Update("phone", u.Phone).Update("house_id", u.HouseId)
-	if update.RowsAffected == 1 {
-		return true
+func EditInfo(u User) (err error) {
+	err = util.Db.Model(&User{}).Where("username=?", u.Username).Updates(&u).Error
+	if err != nil {
+		return
 	}
-	return false
+	return
 }
 
-func EditPassword(u User) bool {
-	update := util.Db.Model(&User{}).Where("username=?", u.Username).Update("password", u.Password)
-	if update.RowsAffected == 1 {
-		return true
+func EditPassword(u User) (err error) {
+	err = util.Db.Model(&User{}).Where("username=?", u.Username).Update("password", u.Password).Error
+	if err != nil {
+		return
 	}
-	return false
+	return
 }
 
-func GetInfo(username string) (bool, UserInfo) {
-	var ui UserInfo
-	find := util.Db.Table("t_user").Select("username,nickname,house_id,address,phone").Where("username=?", username).Find(&ui)
-	if find.RowsAffected == 1 {
-		return true, ui
+func GetInfo(username string) (data UserInfo, err error) {
+	err = util.Db.Table("t_user").
+		Select("username,nickname,house_id,address,phone").
+		Where("username=?", username).
+		Find(&data).Error
+	if err != nil {
+		return
 	}
-	return false, ui
+	return
 }

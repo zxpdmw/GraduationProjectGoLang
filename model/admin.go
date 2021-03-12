@@ -7,31 +7,31 @@ import (
 //管理员结构体
 type Admin struct {
 	Id       int    `json:"id" gorm:"primarykey"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string `json:"username"` //管理员登录账号
+	Password string `json:"password"` //管理员登录密码
 }
 
 func (receiver Admin) TableName() string {
 	return "t_admin"
 }
 
-func AdminLogin(username, password string) bool {
+func AdminLogin(username, password string) (err error) {
 	var c int64
-	count := util.Db.Table("t_admin").Model(&Admin{}).Where("username=? And password=?", username, password).Count(&c)
-	if count.RowsAffected == 1 && c == 1 {
-		return true
+	err = util.Db.Table("t_admin").Model(&Admin{}).Where("username=? And password=?", username, password).Count(&c).Error
+	if err != nil {
+		return
 	}
-	return false
+	return
 }
 
-func AdminRegister(username, password string) bool {
+func AdminRegister(username, password string) (err error) {
 	var a = Admin{
 		Username: username,
 		Password: password,
 	}
-	create := util.Db.Create(&a)
-	if create.RowsAffected == 1 {
-		return true
+	err = util.Db.Create(&a).Error
+	if err != nil {
+		return
 	}
-	return false
+	return
 }

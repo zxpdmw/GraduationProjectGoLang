@@ -13,6 +13,9 @@ func HouseRentingRouters(e *gin.Engine) {
 		group.GET("/rent", Rent)
 		group.GET("/sale", Sale)
 		group.GET("/all", RentSale)
+		group.POST("/publish", publishHouse)
+		group.POST("/edit", editHouse)
+		group.GET("/delete", DeleteHouseById)
 	}
 }
 
@@ -23,20 +26,22 @@ func HouseRentingRouters(e *gin.Engine) {
 //@Failure 500 {object} util.Response
 //@Router /houserentsale/rent [get]
 func Rent(c *gin.Context) {
-	all, b := model.RentAll()
-	if b {
+	data, err := model.RentAll()
+	if err != nil {
 		c.JSON(200, util.Response{
-			Code:    666,
-			Message: util.RentSuccess,
-			Data:    all,
+			Code:    555,
+			Message: util.RentFail,
+			Data:    data,
 		})
+
 		return
 	}
 	c.JSON(200, util.Response{
-		Code:    555,
-		Message: util.RentFail,
-		Data:    all,
+		Code:    666,
+		Message: util.RentSuccess,
+		Data:    data,
 	})
+
 }
 
 //@Summary Sale
@@ -46,19 +51,19 @@ func Rent(c *gin.Context) {
 //@Failure 500 {object} util.Response
 //@Router /houserentsale/sale [get]
 func Sale(c *gin.Context) {
-	all, b := model.SaleAll()
-	if b {
+	data, err := model.SaleAll()
+	if err != nil {
 		c.JSON(200, util.Response{
-			Code:    666,
-			Message: util.SaleSuccess,
-			Data:    all,
+			Code:    555,
+			Message: util.SaleFail,
+			Data:    data,
 		})
 		return
 	}
 	c.JSON(200, util.Response{
-		Code:    555,
-		Message: util.SaleFail,
-		Data:    all,
+		Code:    666,
+		Message: util.SaleSuccess,
+		Data:    data,
 	})
 }
 
@@ -69,19 +74,19 @@ func Sale(c *gin.Context) {
 //@Failure 500 {object} util.Response
 //@Router /houserentsale/all [get]
 func RentSale(c *gin.Context) {
-	all, b := model.RentSaleAll()
-	if b {
+	data, err := model.RentSaleAll()
+	if err != nil {
 		c.JSON(200, util.Response{
-			Code:    666,
-			Message: util.RentSaleSuccess,
-			Data:    all,
+			Code:    555,
+			Message: util.RentSaleFail,
+			Data:    data,
 		})
 		return
 	}
 	c.JSON(200, util.Response{
-		Code:    555,
-		Message: util.RentSaleFail,
-		Data:    all,
+		Code:    666,
+		Message: util.RentSaleSuccess,
+		Data:    data,
 	})
 }
 
@@ -91,20 +96,87 @@ func RentSale(c *gin.Context) {
 //@Param id query string true "房屋主键ID"
 //@Success 200 {object} util.Response
 //@Failure 500 {object} util.Response
-//@Router /houserentsale [get]
-func Delete(c *gin.Context) {
+//@Router /houserentsale/delete [get]
+func DeleteHouseById(c *gin.Context) {
 	query := c.Query("id")
 	atoi, _ := strconv.Atoi(query)
-	b := model.Delete(atoi)
-	if b {
-		c.JSON(200, gin.H{
-			"code":    666,
-			"message": util.DeleteHouseSuccess,
+	err := model.DeleteHouseRentSale(atoi)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.DeleteHouseFail,
+			Data:    nil,
 		})
 		return
 	}
-	c.JSON(200, gin.H{
-		"code":    555,
-		"message": util.DeleteHouseFail,
+
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.DeleteHouseSuccess,
+		Data:    nil,
+	})
+}
+
+//@Summary publishHouse
+//@Tags 房屋租售模块
+//@Description 发布房屋租售信息
+//@Param houseRent body model.HouseRentSale true "房屋租售结构体"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /houserentsale/publish [post]
+func publishHouse(c *gin.Context) {
+	s := model.HouseRentSale{}
+	if err := c.ShouldBindJSON(&s); err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+	}
+	err := model.PublishHouse(s)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    nil,
+	})
+}
+
+//@Summary editHouse
+//@Tags 房屋租售模块
+//@Description 修改房屋信息
+//@Param editHouse body model.EditHouse true "修改房屋信息结构体"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /houserentsale/edit [post]
+func editHouse(c *gin.Context) {
+	s := model.EditHouse{}
+	if err := c.ShouldBindJSON(&s); err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+	}
+	err := model.EditHouseInfo(s)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    nil,
 	})
 }

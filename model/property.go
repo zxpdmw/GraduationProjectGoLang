@@ -14,26 +14,24 @@ func (Property) TableName() string {
 }
 
 //获取每间房屋剩余的物业费
-func GetPropertyByHouseId(houseId string) (bool, float32) {
-	var r float32
-	find := util.Db.Table("t_property").Model(&User{}).Select("amount").Where("house_id=?", houseId).Find(&r)
-	if find.RowsAffected == 1 {
-		return true, r
-	} else {
-		return false, 0.0
+func GetPropertyByHouseId(houseId string) (data float32, err error) {
+	find := util.Db.Table("t_property").Model(&User{}).Select("amount").Where("house_id=?", houseId).Find(&data).Error
+	if find != nil {
+		return
 	}
+	return
 }
 
 //缴纳物业费
-func PayProperty(fee float32, houseId string) bool {
+func PayProperty(property float32, houseId string) (err error) {
 	var r float32
-	find := util.Db.Table("t_property").Select("amount").Where("house_id=?", houseId).Find(&r)
-	if find.RowsAffected == 1 {
-		update := util.Db.Table("t_property").Where("house_id=?", houseId).Update("amount", r+fee)
-		if update.RowsAffected == 1 {
-			return true
-		}
-		return false
+	err = util.Db.Table("t_property").Select("amount").Where("house_id=?", houseId).Find(&r).Error
+	if err != nil {
+		return
 	}
-	return false
+	err = util.Db.Table("t_property").Where("house_id=?", houseId).Update("amount", r+property).Error
+	if err != nil {
+		return
+	}
+	return
 }
