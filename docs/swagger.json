@@ -9,6 +9,70 @@
         "version": "1.0"
     },
     "paths": {
+        "/admin/editcr": {
+            "get": {
+                "description": "修改投诉报修的状态",
+                "tags": [
+                    "管理员模块"
+                ],
+                "summary": "editComplainRepairStatus",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "投诉报修在数据库的主键id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/edithk": {
+            "get": {
+                "description": "修改家政服务的服务状态",
+                "tags": [
+                    "管理员模块"
+                ],
+                "summary": "editHouseKeeping",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "家政服务在数据库中的主键id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/housekeeping": {
             "get": {
                 "description": "获取全部的家政服务请求",
@@ -133,6 +197,45 @@
                         "schema": {
                             "$ref": "#/definitions/model.HouseKeeping"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/housekeeping/delete": {
+            "get": {
+                "description": "如果用户不需要已申请的家政服务，可以选择取消，",
+                "tags": [
+                    "家政服务模块"
+                ],
+                "summary": "deleteHouseKeeping",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户账户",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "家政服务类型",
+                        "name": "hk_type",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {

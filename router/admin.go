@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"graduationproject/model"
 	"graduationproject/util"
+	"strconv"
 )
 
 func AdminRouters(e *gin.Engine) {
@@ -14,6 +15,8 @@ func AdminRouters(e *gin.Engine) {
 		group.GET("/notice", getAllNotice)
 		group.GET("/housekeeping", getAllHouseKeeping)
 		group.GET("/tsbx", getAllComplainRepair)
+		group.GET("/editcr", editComplainRepairStatus)
+		group.GET("/edithk", editHouseKeepingStatus)
 	}
 }
 
@@ -109,4 +112,57 @@ func getAllHouseKeeping(c *gin.Context) {
 		Message: util.RequestSuccess,
 		Data:    data,
 	})
+}
+
+//@Summary editComplainRepairStatus
+//@Tags 管理员模块
+//@Description 修改投诉报修的状态
+//@Param id query string true "投诉报修在数据库的主键id"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /admin/editcr [get]
+func editComplainRepairStatus(c *gin.Context) {
+	query := c.Query("id")
+	atoi, _ := strconv.Atoi(query)
+	err := model.EditComplainRepairStatus(atoi)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: "投诉报修状态修改成功",
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: "投诉报修状态修改失败",
+		Data:    nil,
+	})
+}
+
+//@Summary editHouseKeeping
+//@Tags 管理员模块
+//@Description 修改家政服务的服务状态
+//@Param id query string true "家政服务在数据库中的主键id"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /admin/edithk [get]
+func editHouseKeepingStatus(c *gin.Context) {
+	query := c.Query("id")
+	atoi, _ := strconv.Atoi(query)
+	err := model.EditHouseKeepingStatus(atoi)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: "家政服务状态修改失败",
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: "家政服务状态修改成功",
+		Data:    nil,
+	})
+
 }

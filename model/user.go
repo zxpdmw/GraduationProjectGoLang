@@ -31,13 +31,9 @@ func (User) TableName() string {
 	return "t_user"
 }
 
-func Login(name, password string) (err error) {
-	var user User
-	err = util.Db.Where("username=? and password=? ", name, password).Find(&user).Error
+func Login(name, password string) (c int64, err error) {
+	err = util.Db.Table("t_user").Where("username=?", name).Where("password=?", password).Count(&c).Error
 	if err != nil {
-		return
-	}
-	if user.Username != name || user.Password != password {
 		return
 	}
 	return
@@ -83,6 +79,14 @@ func GetInfo(username string) (data UserInfo, err error) {
 		Select("username,nickname,house_id,address,phone").
 		Where("username=?", username).
 		Find(&data).Error
+	if err != nil {
+		return
+	}
+	return
+}
+
+func CheckUserExist(username string) (sum int64, err error) {
+	err = util.Db.Table("t_user").Where("username=?", username).Count(&sum).Error
 	if err != nil {
 		return
 	}

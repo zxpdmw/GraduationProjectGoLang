@@ -18,13 +18,40 @@ import (
 func userLogin(context *gin.Context) {
 	var username = context.Query("username")
 	var password = context.Query("password")
-	err := model.Login(username, password)
+	c, err := model.Login(username, password)
 	if err != nil {
 		context.JSON(http.StatusOK, util.Response{
 			Code:    555,
 			Message: util.RequestFail,
 			Data:    nil,
 		})
+		return
+	}
+	exist, err := model.CheckUserExist(username)
+	if err != nil {
+		context.JSON(http.StatusOK, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	if exist == 0 {
+		context.JSON(http.StatusOK, util.Response{
+			Code:    5551,
+			Message: util.UserNotExist,
+			Data:    nil,
+		})
+		return
+	}
+
+	if c == 0 {
+		context.JSON(http.StatusOK, util.Response{
+			Code:    5552,
+			Message: util.PasswordError,
+			Data:    nil,
+		})
+		return
 	}
 	context.JSON(http.StatusOK, util.Response{
 		Code:    666,
@@ -50,7 +77,24 @@ func userRegister(c *gin.Context) {
 		})
 		return
 	}
-	err := model.Register(ur)
+	exist, err := model.CheckUserExist(ur.Username)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	if exist == 1 {
+		c.JSON(200, util.Response{
+			Code:    5550,
+			Message: util.UserIsExist,
+			Data:    nil,
+		})
+		return
+	}
+	err = model.Register(ur)
 	if err != nil {
 		c.JSON(200, util.Response{
 			Code:    555,

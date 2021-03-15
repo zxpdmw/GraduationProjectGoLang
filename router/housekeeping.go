@@ -11,6 +11,7 @@ func HousekeepingRouters(e *gin.Engine) {
 	{
 		group.GET("/get", getHouseKeepingByUsername)
 		group.POST("/add", addHouseKeeping)
+		group.GET("/delete", deleteHouseKeeping)
 	}
 }
 
@@ -69,4 +70,31 @@ func getHouseKeepingByUsername(c *gin.Context) {
 		Data:    data,
 	})
 
+}
+
+//@Summary deleteHouseKeeping
+//@Tags 家政服务模块
+//@Description 如果用户不需要已申请的家政服务，可以选择取消，
+//@Param username query string true "用户账户"
+//@Param hk_type query string true "家政服务类型"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /housekeeping/delete [get]
+func deleteHouseKeeping(c *gin.Context) {
+	query := c.Query("username")
+	s := c.Query("hk_type")
+	err := model.DeleteHouseKeeping(s, query)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    nil,
+	})
 }

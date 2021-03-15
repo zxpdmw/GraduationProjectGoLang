@@ -159,6 +159,48 @@ info:
   title: 社区便民服务接口
   version: "1.0"
 paths:
+  /admin/editcr:
+    get:
+      description: 修改投诉报修的状态
+      parameters:
+      - description: 投诉报修在数据库的主键id
+        in: query
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: editComplainRepairStatus
+      tags:
+      - 管理员模块
+  /admin/edithk:
+    get:
+      description: 修改家政服务的服务状态
+      parameters:
+      - description: 家政服务在数据库中的主键id
+        in: query
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: editHouseKeeping
+      tags:
+      - 管理员模块
   /admin/housekeeping:
     get:
       description: 获取全部的家政服务请求
@@ -250,6 +292,32 @@ paths:
           schema:
             $ref: '#/definitions/util.Response'
       summary: addHouseKeeping
+      tags:
+      - 家政服务模块
+  /housekeeping/delete:
+    get:
+      description: 如果用户不需要已申请的家政服务，可以选择取消，
+      parameters:
+      - description: 用户账户
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 家政服务类型
+        in: query
+        name: hk_type
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: deleteHouseKeeping
       tags:
       - 家政服务模块
   /housekeeping/get:

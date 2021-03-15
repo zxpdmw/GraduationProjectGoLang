@@ -17,6 +17,14 @@ func (TSBX) TableName() string {
 	return "t_tsbx"
 }
 
+func EditComplainRepairStatus(id int) (err error) {
+	err = util.Db.Table("t_tsbx").Where("id=?", id).Update("status", "已处理").Error
+	if err != nil {
+		return
+	}
+	return
+}
+
 //添加投诉报修
 func AddTB(tb TSBX) (err error) {
 	tb.Status = "未处理"
