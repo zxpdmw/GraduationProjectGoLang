@@ -25,7 +25,12 @@ func ComplainRepairRouters(e *gin.Engine) {
 func addComplainRepair(c *gin.Context) {
 	var tb model.TSBX
 	if err := c.ShouldBindJSON(&tb); err != nil {
-		util.CheckError(err)
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.ComplainRepairFail,
+			Data:    nil,
+		})
+		return
 	}
 	err := model.AddTB(tb)
 	if err != nil {
