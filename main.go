@@ -11,8 +11,7 @@ import (
 
 //@title 社区便民服务接口
 //@version 1.0
-//@license.name zwy
-//@author 张惟宇
+//@license.name 张惟宇
 func main() {
 	server := gin.Default()
 	path := env.GetTemplatePath()

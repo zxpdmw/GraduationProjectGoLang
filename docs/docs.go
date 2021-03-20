@@ -20,7 +20,7 @@ var doc = `{
         "title": "{{.Title}}",
         "contact": {},
         "license": {
-            "name": "zwy"
+            "name": "张惟宇"
         },
         "version": "{{.Version}}"
     },
