@@ -14,7 +14,7 @@ func AdminRouters(e *gin.Engine) {
 		group.GET("login", adminLogin)
 		group.GET("/notice", getAllNotice)
 		group.GET("/housekeeping", getAllHouseKeeping)
-		group.GET("/tsbx", getAllComplainRepair)
+		group.GET("/complainrepair", getAllComplainRepair)
 		group.GET("/editcr", editComplainRepairStatus)
 		group.GET("/edithk", editHouseKeepingStatus)
 	}
@@ -73,7 +73,7 @@ func getAllNotice(c *gin.Context) {
 //@Description 后台管理员获取全部的投诉报修
 //@Success 200 {object} util.Response
 //@Failure 500 {object} util.Response
-//@Router /admin/tsbx [get]
+//@Router /admin/complainrepair [get]
 func getAllComplainRepair(c *gin.Context) {
 	data, err := model.GetAllCR()
 	if err != nil {

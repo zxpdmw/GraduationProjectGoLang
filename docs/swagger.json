@@ -9,6 +9,29 @@
         "version": "1.0"
     },
     "paths": {
+        "/admin/complainrepair": {
+            "get": {
+                "description": "后台管理员获取全部的投诉报修",
+                "tags": [
+                    "管理员模块"
+                ],
+                "summary": "gtAllComplainRepair",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/editcr": {
             "get": {
                 "description": "修改投诉报修的状态",
@@ -158,13 +181,56 @@
                 }
             }
         },
-        "/admin/tsbx": {
-            "get": {
-                "description": "后台管理员获取全部的投诉报修",
+        "/complainrepair/add": {
+            "post": {
+                "description": "添加投诉报修",
                 "tags": [
-                    "管理员模块"
+                    "投诉报修模块"
                 ],
-                "summary": "gtAllComplainRepair",
+                "summary": "addComplainRepair",
+                "parameters": [
+                    {
+                        "description": "投诉报修结构体",
+                        "name": "tb",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ComplainRepair"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/complainrepair/get": {
+            "get": {
+                "description": "获取本人的投诉报修",
+                "tags": [
+                    "投诉报修模块"
+                ],
+                "summary": "getComplainRepairByUsername",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户账号",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -647,72 +713,6 @@
                 }
             }
         },
-        "/tsbx/add": {
-            "post": {
-                "description": "添加投诉报修",
-                "tags": [
-                    "投诉报修模块"
-                ],
-                "summary": "addComplainRepair",
-                "parameters": [
-                    {
-                        "description": "TSBX结构体",
-                        "name": "tb",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.TSBX"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/tsbx/get": {
-            "get": {
-                "description": "获取本人的投诉报修",
-                "tags": [
-                    "投诉报修模块"
-                ],
-                "summary": "getComplainRepairByUsername",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户账号",
-                        "name": "username",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/user/get": {
             "get": {
                 "description": "获取用户信息根据username",
@@ -888,6 +888,38 @@
         }
     },
     "definitions": {
+        "model.ComplainRepair": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "投诉报修者地址",
+                    "type": "string"
+                },
+                "cr_type": {
+                    "description": "投诉 报修",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "message": {
+                    "description": "投诉报修详细信息",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "投诉报修者电话",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "未处理 处理中 已处理",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "投诉报修者账户",
+                    "type": "string"
+                }
+            }
+        },
         "model.EditHouse": {
             "type": "object",
             "properties": {
@@ -914,7 +946,7 @@
                     "description": "房屋价格",
                     "type": "string"
                 },
-                "publisher": {
+                "username": {
                     "description": "发布者",
                     "type": "string"
                 }
@@ -974,7 +1006,7 @@
                     "description": "房屋价格",
                     "type": "string"
                 },
-                "publisher": {
+                "username": {
                     "description": "发布者",
                     "type": "string"
                 }
@@ -1000,38 +1032,6 @@
                 },
                 "title": {
                     "description": "公告发布标题",
-                    "type": "string"
-                }
-            }
-        },
-        "model.TSBX": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "description": "投诉报修者地址",
-                    "type": "string"
-                },
-                "cr_type": {
-                    "description": "投诉 报修",
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "message": {
-                    "description": "投诉报修详细信息",
-                    "type": "string"
-                },
-                "phone": {
-                    "description": "投诉报修者电话",
-                    "type": "string"
-                },
-                "status": {
-                    "description": "未处理 处理中 已处理",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "投诉报修者账户",
                     "type": "string"
                 }
             }

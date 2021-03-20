@@ -7,7 +7,7 @@ import (
 )
 
 func ComplainRepairRouters(e *gin.Engine) {
-	group := e.Group("/tsbx")
+	group := e.Group("/complainrepair")
 	{
 		group.POST("/add", addComplainRepair)
 		group.GET("/get", getComplainRepairByUsername)
@@ -18,12 +18,12 @@ func ComplainRepairRouters(e *gin.Engine) {
 //@Summary addComplainRepair
 //@Tags 投诉报修模块
 //@Description 添加投诉报修
-//@Param tb body model.TSBX true "TSBX结构体"
+//@Param tb body model.ComplainRepair true "投诉报修结构体"
 //@Success 200 {object} util.Response
 //@Failure 500 {object} util.Response
-//@Router /tsbx/add [post]
+//@Router /complainrepair/add [post]
 func addComplainRepair(c *gin.Context) {
-	var tb model.TSBX
+	var tb model.ComplainRepair
 	if err := c.ShouldBindJSON(&tb); err != nil {
 		c.JSON(200, util.Response{
 			Code:    555,
@@ -54,7 +54,7 @@ func addComplainRepair(c *gin.Context) {
 //@Param username query string true "用户账号"
 //@Success 200 {object} util.Response
 //@Failure 500 {object} util.Response
-//@Router /tsbx/get [get]
+//@Router /complainrepair/get [get]
 func getComplainRepairByUsername(c *gin.Context) {
 	query := c.Query("username")
 	data, err := model.GetTBByUsername(query)

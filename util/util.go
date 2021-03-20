@@ -4,10 +4,7 @@ import (
 	"github.com/go-redis/redis"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 	"log"
-	"os"
-	"time"
 )
 
 const GetDataFail = "数据获取失败"
@@ -56,17 +53,18 @@ var err error
 var Rdb *redis.Client
 
 func init() {
-	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
-		logger.Config{
-			SlowThreshold: time.Second, // 慢 SQL 阈值
-			LogLevel:      logger.Info, // Log level
-			Colorful:      true,        // 禁用彩色打印
-		},
-	)
+	//newLogger := logger.New(
+	//	log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+	//	logger.Config{
+	//		SlowThreshold: time.Second, // 慢 SQL 阈值
+	//		LogLevel:      logger.Info, // Log level
+	//		Colorful:      true,        // 禁用彩色打印
+	//	},
+	//)
 	Db, err = gorm.Open(mysql.Open("zxpdmw:Zxpdmw520@tcp(rm-2zeqer8186x8o6hi9vo.mysql.rds.aliyuncs.com:3306)/graduationproject?parseTime=true&loc=Asia%2fShanghai"), &gorm.Config{
-		Logger: newLogger,
+		//Logger: newLogger,
 	})
+	Db = Db.Debug()
 	if err != nil {
 		log.Fatal(err)
 	}
