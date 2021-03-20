@@ -20,7 +20,7 @@ func (Notice) TableName() string {
 
 //获取推荐公告 按时间最新排序获取
 func RecommendNotice() (data []Notice, err error) {
-	find := util.Db.Order("publish_time desc").Find(&data).Error
+	find := util.Db.Table("t_notice").Order("publish_time desc").Find(&data).Error
 	if find != nil {
 		return
 	}
@@ -30,7 +30,7 @@ func RecommendNotice() (data []Notice, err error) {
 //获取公告详情
 func DetailNotice(title string) (data Notice, err error) {
 
-	find := util.Db.Where("title=?", title).Find(&data).Error
+	find := util.Db.Table("t_notice").Where("title=?", title).Find(&data).Error
 	if find != nil {
 		return
 	}
@@ -39,7 +39,7 @@ func DetailNotice(title string) (data Notice, err error) {
 
 //删除公告
 func DeleteNotice(title string) (err error) {
-	tx := util.Db.Where("title=?", title).Delete(&Notice{}).Error
+	tx := util.Db.Table("t_notice").Where("title=?", title).Delete(&Notice{}).Error
 	if tx != nil {
 		return
 	}
@@ -55,7 +55,7 @@ func PublishNotice(title, content, publisher string) (err error) {
 		Content:     content,
 		PublishTime: time.Now(),
 	}
-	err = util.Db.Create(&n).Error
+	err = util.Db.Table("t_notice").Create(&n).Error
 	if err != nil {
 		return
 	}
@@ -67,7 +67,7 @@ func EditNotice() {
 }
 
 func GetAllNotice() (data []Notice, err error) {
-	find := util.Db.Find(&data).Error
+	find := util.Db.Table("t_notice").Find(&data).Error
 	if find != nil {
 		return
 	}
