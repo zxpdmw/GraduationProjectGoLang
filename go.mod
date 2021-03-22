@@ -12,6 +12,7 @@ require (
 	github.com/onsi/ginkgo v1.15.1 // indirect
 	github.com/onsi/gomega v1.11.0 // indirect
 	github.com/pkg/errors v0.9.1
+	github.com/robfig/cron v1.2.0 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.0

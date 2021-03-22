@@ -103,6 +103,10 @@ func userRegister(c *gin.Context) {
 		})
 		return
 	}
+	model.UserBindHouseID(model.Property{
+		HouseID: ur.HouseId,
+		Balance: 500.0,
+	})
 	c.JSON(http.StatusOK, util.Response{
 		Code:    666,
 		Message: util.RegisterSuccess,
@@ -202,6 +206,24 @@ func getInfo(c *gin.Context) {
 	})
 }
 
+func getHouseId(c *gin.Context) {
+	query := c.Query("username")
+	id, err := model.GetHouseId(query)
+	if err != nil {
+		c.JSON(http.StatusOK, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    id,
+	})
+}
+
 func UserRouters(engine *gin.Engine) {
 	group := engine.Group("/user")
 	{
@@ -210,5 +232,6 @@ func UserRouters(engine *gin.Engine) {
 		group.POST("/register", userRegister)
 		group.POST("/info", editUserInfo)
 		group.POST("/password", editUserPassword)
+		group.GET("/houseid", getHouseId)
 	}
 }

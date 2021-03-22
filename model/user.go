@@ -92,3 +92,11 @@ func CheckUserExist(username string) (sum int64, err error) {
 	}
 	return
 }
+
+func GetHouseId(usernaem string) (houseId string, err error) {
+	err = util.Db.Table("t_user").Select("house_id").Where("username=?", usernaem).Find(&houseId).Error
+	if err != nil {
+		return
+	}
+	return
+}

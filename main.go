@@ -6,7 +6,9 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "graduationproject/docs"
 	"graduationproject/env"
+	"graduationproject/model"
 	"graduationproject/router"
+	"graduationproject/util"
 )
 
 //@title 社区便民服务接口
@@ -14,6 +16,10 @@ import (
 //@license.name 张惟宇
 func main() {
 	server := gin.Default()
+	util.C.AddFunc("0 0 0 1/1 * ? *", func() {
+		model.CronProperty()
+	})
+	util.C.Start()
 	path := env.GetTemplatePath()
 	server.LoadHTMLGlob(path)
 	url := ginSwagger.URL(env.GetIp())
@@ -28,6 +34,7 @@ func main() {
 	router.PropertyRouters(server)
 	router.ComplainRepairRouters(server)
 	server.Run(":80")
+	//server.Run(":8080")
 }
 
 //从网上上加载图片作为favicon

@@ -12,6 +12,7 @@ func PropertyRouters(e *gin.Engine) {
 	{
 		group.GET("/get", getProperty)
 		group.GET("/pay", payProperty)
+		group.GET("/cron", CronProperty)
 	}
 }
 
@@ -71,10 +72,10 @@ func payProperty(c *gin.Context) {
 	c.JSON(200, util.Response{
 		Code:    666,
 		Message: util.PropertySuccess,
-		Data:    data,
+		Data:    nil,
 	})
 }
 
-func CronProperty() {
-
+func CronProperty(c *gin.Context) {
+	model.CronProperty()
 }
