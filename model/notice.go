@@ -7,11 +7,11 @@ import (
 
 //公告结构体
 type Notice struct {
-	ID          int       `json:"id" gorm:"primarykey"`
-	Publisher   string    `json:"publisher"`    //公告发布者
-	Title       string    `json:"title"`        //公告发布标题
-	Content     string    `json:"content"`      //公告内容
-	PublishTime time.Time `json:"publish_time"` //公告发布时间
+	ID          int    `json:"id" gorm:"primarykey"`
+	Publisher   string `json:"publisher"`    //公告发布者
+	Title       string `json:"title"`        //公告发布标题
+	Content     string `json:"content"`      //公告内容
+	PublishTime string `json:"publish_time"` //公告发布时间
 }
 
 func (Notice) TableName() string {
@@ -53,7 +53,7 @@ func PublishNotice(title, content, publisher string) (err error) {
 		Publisher:   publisher,
 		Title:       title,
 		Content:     content,
-		PublishTime: time.Now(),
+		PublishTime: time.Now().Format("2006-01-02 15:04:05"),
 	}
 	err = util.Db.Table("t_notice").Create(&n).Error
 	if err != nil {

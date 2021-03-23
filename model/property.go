@@ -26,15 +26,7 @@ func GetPropertyByHouseId(houseId string) (data float32, err error) {
 
 //缴纳物业费
 func PayProperty(property float32, houseId string) (err error) {
-	var r float32
-	err = util.Db.Table("t_property").Select("balance").Where("house_id=?", houseId).Find(&r).Error
-	if err != nil {
-		return
-	}
-	err = util.Db.Table("t_property").Where("house_id=?", houseId).Update("balance", r+property).Error
-	if err != nil {
-		return
-	}
+	err = util.Db.Table("t_property").Where("house_id=?", houseId).Update("balance", gorm.Expr("balance+?", property)).Error
 	return
 }
 
