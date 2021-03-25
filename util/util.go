@@ -1,6 +1,8 @@
 package util
 
 import (
+	_ "embed"
+	"fmt"
 	"github.com/go-redis/redis"
 	"github.com/robfig/cron"
 	"gorm.io/driver/mysql"
@@ -49,20 +51,33 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
+type DbConfig struct {
+	Username string
+	Password string
+	Ip       string
+	Port     int
+	Dbname   string
+}
+
 var C *cron.Cron
 var Db *gorm.DB
 var err error
 var Rdb *redis.Client
 
-func init() {
-	C = cron.New()
-	Db, err = gorm.Open(mysql.Open("zxpdmw:Zxpdmw520@tcp(rm-2zeqer8186x8o6hi9vo.mysql.rds.aliyuncs.com:3306)/graduationproject?parseTime=true&loc=Asia%2fShanghai"), &gorm.Config{
-		//Logger: newLogger,
-	})
+func MySqlInit(config DbConfig) {
+	conn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true", config.Username, config.Password, config.Ip, config.Port, config.Dbname)
+	Db, err = gorm.Open(mysql.Open(conn), &gorm.Config{})
 	Db = Db.Debug()
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func CronInit() {
+	C = cron.New()
+}
+
+func RedisInit() {
 	Rdb = redis.NewClient(&redis.Options{
 		Addr:     "39.96.113.190:6379",
 		Password: "", // no password set

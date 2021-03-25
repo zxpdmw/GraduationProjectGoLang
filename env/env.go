@@ -16,7 +16,7 @@ func GetProjectPath() string {
 func GetIp() string {
 	ip := "http://"
 	if ostype == "windows" {
-		ip += "localhost:80"
+		ip += "localhost:8080"
 		ip += "/swagger/doc.json"
 	} else if ostype == "linux" {
 		ip += "39.96.113.190:8080"

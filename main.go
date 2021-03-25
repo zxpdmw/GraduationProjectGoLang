@@ -1,7 +1,11 @@
 package main
 
 import (
+	"bytes"
+	"embed"
+	_ "embed"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "graduationproject/docs"
@@ -9,23 +13,53 @@ import (
 	"graduationproject/model"
 	"graduationproject/router"
 	"graduationproject/util"
+	"html/template"
+	"net/http"
 )
+
+//go:embed config/config.yaml
+var config []byte
+
+//go:embed templates/*
+var tmpl embed.FS
+
+//go:embed assets/*
+var static embed.FS
+
+func init() {
+	viper.SetConfigType("yaml")
+	viper.ReadConfig(bytes.NewBuffer(config))
+	var config = util.DbConfig{
+		Username: viper.GetString("db.username"),
+		Password: viper.GetString("db.password"),
+		Ip:       viper.GetString("db.ip"),
+		Port:     viper.GetInt("db.port"),
+		Dbname:   viper.GetString("db.dbname"),
+	}
+	util.MySqlInit(config)
+	util.RedisInit()
+	util.CronInit()
+	util.C.AddFunc("0 0 0 1/1 * ? *", func() {
+		model.CronProperty()
+	})
+	util.C.Start()
+}
 
 //@title 社区便民服务接口
 //@version 1.0
 //@license.name 张惟宇
 func main() {
 	server := gin.Default()
-	util.C.AddFunc("0 0 0 1/1 * ? *", func() {
-		model.CronProperty()
-	})
-	util.C.Start()
-	path := env.GetTemplatePath()
-	server.LoadHTMLGlob(path)
+	fs, _ := template.ParseFS(tmpl, "templates/*.gohtml")
+	server.SetHTMLTemplate(fs)
+	server.StaticFS("/public", http.FS(static))
 	url := ginSwagger.URL(env.GetIp())
 	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
-	server.Static("/static", "./static")
-	server.StaticFile("/favicon.ico", "static/img/favicon.ico")
+	server.GET("/favicon.ico", func(context *gin.Context) {
+		file, _ := static.ReadFile("assets/favicon.ico")
+		context.Data(200,
+			"image/x-icon", file)
+	})
 	router.AdminRouters(server)
 	router.UserRouters(server)
 	router.NoticeRouters(server)
@@ -33,22 +67,6 @@ func main() {
 	router.HouseRentingRouters(server)
 	router.PropertyRouters(server)
 	router.ComplainRepairRouters(server)
-	server.Run(":80")
-	//server.Run(":8080")
-}
+	server.Run()
 
-//从网上上加载图片作为favicon
-/*
-	server.GET("/favicon.ico", func(c *gin.Context) {
-	response, err := http.Get("https://cdn.jsdelivr.net/gh/zxpdmw/pictureBed/img/touxiang.jpg")
-	if err != nil || response.StatusCode != http.StatusOK {
-	c.Status(http.StatusServiceUnavailable)
-		return
-	}
-	reader := response.Body
-	defer reader.Close()
-	contentLength := response.ContentLength
-	contentType := response.Header.Get("Content-Type")
-	c.DataFromReader(http.StatusOK, contentLength, contentType, reader, nil)
-})
-*/
+}

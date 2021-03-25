@@ -1,0 +1,9 @@
+db:
+  username: zxpdmw
+  password: Zxpdmw520
+  ip: rm-2zeqer8186x8o6hi9vo.mysql.rds.aliyuncs.com
+  dbname: graduationproject
+  port: 3306
+
+server:
+  port: 80
