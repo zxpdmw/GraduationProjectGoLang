@@ -1,0 +1,8 @@
+2021-03-30T15:44:15.897+0800	ERROR	util/util.go:102	happer error
+2021-03-30T15:44:16.179+0800	INFO	util/util.go:78	get mysql conn success
+2021-03-30T15:44:16.263+0800	INFO	util/util.go:97	get redis conn success
+2021-03-30T15:44:16.264+0800	ERROR	util/util.go:102	happer error	{"error": "Expected 5 to 6 fields, found 7: 0 0 0 1/1 * ? *"}
+2021-03-30T15:44:16.264+0800	ERROR	util/util.go:102	happer error
+2021-03-30T15:44:33.985+0800	INFO	middleware/logger.go:18	/admin/	{"status": 200, "method": "GET", "path": "/admin/", "query": "", "ip": "::1", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36", "errors": "", "cost": 0.0015344}
+2021-03-30T15:44:34.234+0800	INFO	middleware/logger.go:18	/public/assets/css/a.css	{"status": 200, "method": "GET", "path": "/public/assets/css/a.css", "query": "", "ip": "::1", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36", "errors": "", "cost": 0.1815684}
+2021-03-30T15:44:34.234+0800	INFO	middleware/logger.go:18	/public/assets/js/a.js	{"status": 200, "method": "GET", "path": "/public/assets/js/a.js", "query": "", "ip": "::1", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36", "errors": "", "cost": 0.1567295}

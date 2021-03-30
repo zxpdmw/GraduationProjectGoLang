@@ -1,13 +1,15 @@
 package util
 
 import (
-	_ "embed"
+	"context"
 	"fmt"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/robfig/cron"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
+	"os"
 )
 
 const GetDataFail = "数据获取失败"
@@ -63,13 +65,17 @@ var C *cron.Cron
 var Db *gorm.DB
 var err error
 var Rdb *redis.Client
+var Logger *zap.Logger
 
 func MySqlInit(config DbConfig) {
+
 	conn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true", config.Username, config.Password, config.Ip, config.Port, config.Dbname)
 	Db, err = gorm.Open(mysql.Open(conn), &gorm.Config{})
 	Db = Db.Debug()
 	if err != nil {
-		log.Fatal(err)
+		Logger.Error("get mysql conn is happen error", zap.Error(err))
+	} else {
+		Logger.Info("get mysql conn success")
 	}
 }
 
@@ -78,13 +84,40 @@ func CronInit() {
 }
 
 func RedisInit() {
+	ctx := context.Background()
 	Rdb = redis.NewClient(&redis.Options{
 		Addr:     "39.96.113.190:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
-	_, err = Rdb.Ping().Result()
+	_, err = Rdb.Ping(ctx).Result()
 	if err != nil {
-		log.Fatal(err)
+		Logger.Error("get redis conn is happen error", zap.Error(err))
+	} else {
+		Logger.Info("get redis conn success")
 	}
+}
+
+func ErrorHandler(err error) {
+	Logger.Error("happer error", zap.Error(err))
+}
+
+func InitLogger() {
+	writeSyncer := getLogWriter()
+	encoder := getEncoder()
+	core := zapcore.NewCore(encoder, writeSyncer, zapcore.DebugLevel)
+
+	Logger = zap.New(core, zap.AddCaller())
+}
+
+func getEncoder() zapcore.Encoder {
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	return zapcore.NewConsoleEncoder(encoderConfig)
+}
+
+func getLogWriter() zapcore.WriteSyncer {
+	//file, _ := os.Create("./log/dev.log")
+	return zapcore.AddSync(os.Stdout)
 }

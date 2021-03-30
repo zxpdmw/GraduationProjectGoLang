@@ -17,10 +17,7 @@ func (receiver Admin) TableName() string {
 
 func AdminLogin(username, password string) (err error) {
 	var c int64
-	err = util.Db.Table("t_admin").Model(&Admin{}).Where("username=? And password=?", username, password).Count(&c).Error
-	if err != nil {
-		return
-	}
+	err = util.Db.Table("t_admin").Where("username=? And password=?", username, password).Count(&c).Error
 	return
 }
 

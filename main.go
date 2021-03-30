@@ -26,9 +26,13 @@ var tmpl embed.FS
 //go:embed assets/*
 var static embed.FS
 
+var err error
+
 func init() {
+	util.InitLogger()
 	viper.SetConfigType("yaml")
-	viper.ReadConfig(bytes.NewBuffer(config))
+	err = viper.ReadConfig(bytes.NewBuffer(config))
+	util.ErrorHandler(err)
 	var config = util.DbConfig{
 		Username: viper.GetString("db.username"),
 		Password: viper.GetString("db.password"),
@@ -39,9 +43,10 @@ func init() {
 	util.MySqlInit(config)
 	util.RedisInit()
 	util.CronInit()
-	util.C.AddFunc("0 0 0 1/1 * ? *", func() {
+	err = util.C.AddFunc("0 0 0 1/1 * ? *", func() {
 		model.CronProperty()
 	})
+	util.ErrorHandler(err)
 	util.C.Start()
 }
 
@@ -50,11 +55,11 @@ func init() {
 //@license.name 张惟宇
 func main() {
 	server := gin.Default()
-	fs, _ := template.ParseFS(tmpl, "templates/*.gohtml")
+	fs, err := template.ParseFS(tmpl, "templates/*.gohtml")
+	util.ErrorHandler(err)
 	server.SetHTMLTemplate(fs)
 	server.StaticFS("/public", http.FS(static))
-	url := ginSwagger.URL(env.GetIp())
-	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL(env.GetIp())))
 	server.GET("/favicon.ico", func(context *gin.Context) {
 		file, _ := static.ReadFile("assets/favicon.ico")
 		context.Data(200,
@@ -67,6 +72,9 @@ func main() {
 	router.HouseRentingRouters(server)
 	router.PropertyRouters(server)
 	router.ComplainRepairRouters(server)
-	server.Run()
-
+	server.NoRoute(func(context *gin.Context) {
+		context.String(200, "404 page not found")
+	})
+	err = server.Run()
+	util.ErrorHandler(err)
 }

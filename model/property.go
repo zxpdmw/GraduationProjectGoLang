@@ -30,6 +30,7 @@ func PayProperty(property float32, houseId string) (err error) {
 	return
 }
 
+//注册用户将用户和houseId绑定并插入property表，每个用户默认物业费500.00
 func UserBindHouseID(property Property) (err error) {
 	err = util.Db.Table("t_property").Create(&property).Error
 	if err != nil {
@@ -38,6 +39,7 @@ func UserBindHouseID(property Property) (err error) {
 	return err
 }
 
+//cron表达式，定时扣除系统中所有房屋的物业费
 func CronProperty() {
 	util.Db.Table("t_property").Where("1=?", 1).
 		Update("balance", gorm.Expr("balance-?", 5))

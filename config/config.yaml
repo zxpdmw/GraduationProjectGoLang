@@ -6,4 +6,4 @@ db:
   port: 3306
 
 server:
-  port: 80
+  port: 8080
