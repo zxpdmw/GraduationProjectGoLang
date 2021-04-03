@@ -5,6 +5,7 @@ import (
 	"graduationproject/model"
 	"graduationproject/util"
 	"net/http"
+	"strings"
 )
 
 //@Summary userLogin
@@ -27,17 +28,8 @@ func userLogin(context *gin.Context) {
 		})
 		return
 	}
-	exist, err := model.CheckUserExist(username)
-	if err != nil {
-		context.JSON(http.StatusOK, util.Response{
-			Code:    555,
-			Message: util.RequestFail,
-			Data:    nil,
-		})
-		return
-	}
-	if exist == 0 {
-		context.JSON(http.StatusOK, util.Response{
+	if strings.EqualFold(c.Username, "") {
+		context.JSON(200, util.Response{
 			Code:    5551,
 			Message: util.UserNotExist,
 			Data:    nil,
@@ -45,7 +37,7 @@ func userLogin(context *gin.Context) {
 		return
 	}
 
-	if c == 0 {
+	if !strings.EqualFold(password, c.Password) {
 		context.JSON(http.StatusOK, util.Response{
 			Code:    5552,
 			Message: util.PasswordError,
@@ -56,7 +48,7 @@ func userLogin(context *gin.Context) {
 	context.JSON(http.StatusOK, util.Response{
 		Code:    666,
 		Message: util.LoginSuccess,
-		Data:    nil,
+		Data:    c,
 	})
 }
 

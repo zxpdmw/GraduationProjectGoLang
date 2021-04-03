@@ -17,6 +17,7 @@ func (ComplainRepair) TableName() string {
 	return "t_complain_repair"
 }
 
+//修改后台投诉报修处理的状态
 func EditComplainRepairStatus(id int) (err error) {
 	err = util.Db.Table("t_complain_repair").Where("id=?", id).Update("status", "已处理").Error
 	if err != nil {
@@ -35,7 +36,7 @@ func AddTB(tb ComplainRepair) (err error) {
 	return
 }
 
-//获取user 添加的投诉保修
+//获取user添加的投诉保修
 func GetTBByUsername(username string) (data []ComplainRepair, err error) {
 	err = util.Db.Table("t_complain_repair").Where("username=?", username).Find(&data).Error
 	if err != nil {

@@ -11,6 +11,8 @@ func ComplainRepairRouters(e *gin.Engine) {
 	{
 		group.POST("/add", addComplainRepair)
 		group.GET("/get", getComplainRepairByUsername)
+		group.GET("/complain")
+		group.GET("repair")
 	}
 
 }
@@ -71,5 +73,4 @@ func getComplainRepairByUsername(c *gin.Context) {
 		Message: util.GetDataSuccess,
 		Data:    data,
 	})
-
 }

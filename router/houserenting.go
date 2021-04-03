@@ -16,6 +16,7 @@ func HouseRentingRouters(e *gin.Engine) {
 		group.POST("/publish", publishHouse)
 		group.POST("/edit", editHouse)
 		group.GET("/delete", DeleteHouseById)
+		group.GET("/get", getByUsername)
 	}
 }
 
@@ -178,5 +179,23 @@ func editHouse(c *gin.Context) {
 		Code:    666,
 		Message: util.RequestSuccess,
 		Data:    nil,
+	})
+}
+
+func getByUsername(c *gin.Context) {
+	query := c.Query("username")
+	username, err := model.GetByUsername(query)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    username,
 	})
 }

@@ -31,8 +31,8 @@ func (User) TableName() string {
 	return "t_user"
 }
 
-func Login(name, password string) (c int64, err error) {
-	err = util.Db.Table("t_user").Where("username=?", name).Where("password=?", password).Count(&c).Error
+func Login(name, password string) (user User, err error) {
+	err = util.Db.Table("t_user").Where("username=?", name).Where("password=?", password).Find(&user).Error
 	if err != nil {
 		return
 	}

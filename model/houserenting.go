@@ -93,3 +93,11 @@ func EditHouseInfo(rent EditHouse) (err error) {
 	}
 	return
 }
+
+func GetByUsername(username string) (house []HouseRentSale, err error) {
+	err = util.Db.Table("t_house_renting").Where("username=?", username).Find(&house).Error
+	if err != nil {
+		return
+	}
+	return
+}
