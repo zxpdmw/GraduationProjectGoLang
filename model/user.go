@@ -66,8 +66,8 @@ func EditInfo(u User) (err error) {
 	return
 }
 
-func EditPassword(u User) (err error) {
-	err = util.Db.Model(&User{}).Where("username=?", u.Username).Update("password", u.Password).Error
+func EditPassword(username, password string) (err error) {
+	err = util.Db.Table("t_user").Where("username=?", username).Update("password", password).Error
 	if err != nil {
 		return
 	}
@@ -99,4 +99,36 @@ func GetHouseId(usernaem string) (houseId string, err error) {
 		return
 	}
 	return
+}
+
+func EditNickname(username, nickname string) (err error) {
+	err = util.Db.Table("t_user").Where("username=?", username).Update("nickname", nickname).Error
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+func EditAddress(username, address string) (err error) {
+	err = util.Db.Table("t_user").Where("username=?", username).Update("address", address).Error
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+func EditPhone(username, phone string) (err error) {
+	err = util.Db.Table("t_user").Where("username=?", username).Update("phone", phone).Error
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+func EditHouseID(username, house string) (err error) {
+	err = util.Db.Table("t_user").Where("username=?", username).Update("house_id", house).Error
+	if err != nil {
+		return err
+	}
+	return err
 }

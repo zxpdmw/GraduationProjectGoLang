@@ -19,19 +19,20 @@ import (
 func userLogin(context *gin.Context) {
 	var username = context.Query("username")
 	var password = context.Query("password")
+	exist, _ := model.CheckUserExist(username)
+	if exist == 0 {
+		context.JSON(200, util.Response{
+			Code:    5551,
+			Message: util.UserNotExist,
+			Data:    nil,
+		})
+		return
+	}
 	c, err := model.Login(username, password)
 	if err != nil {
 		context.JSON(http.StatusOK, util.Response{
 			Code:    555,
 			Message: util.RequestFail,
-			Data:    nil,
-		})
-		return
-	}
-	if strings.EqualFold(c.Username, "") {
-		context.JSON(200, util.Response{
-			Code:    5551,
-			Message: util.UserNotExist,
 			Data:    nil,
 		})
 		return
@@ -149,15 +150,9 @@ func editUserInfo(c *gin.Context) {
 //@Failure 500 {object} util.Response
 //@Router /user/password [post]
 func editUserPassword(c *gin.Context) {
-	var u model.User
-	if err := c.ShouldBindJSON(&u); err != nil {
-		c.JSON(200, util.Response{
-			Code:    555,
-			Message: util.RequestFail,
-			Data:    nil,
-		})
-	}
-	err := model.EditPassword(u)
+	username := c.Query("username")
+	password := c.Query("password")
+	err := model.EditPassword(username, password)
 	if err != nil {
 		c.JSON(200, util.Response{
 			Code:    555,
@@ -216,6 +211,85 @@ func getHouseId(c *gin.Context) {
 	})
 }
 
+func editHouseId(c *gin.Context) {
+	username := c.Query("username")
+	houseID := c.Query("house")
+	err := model.EditHouseID(username, houseID)
+	if err != nil {
+		c.JSON(http.StatusOK, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    nil,
+	})
+
+}
+
+func editNickname(c *gin.Context) {
+	username := c.Query("username")
+	nickname := c.Query("nickname")
+	err := model.EditNickname(username, nickname)
+	if err != nil {
+		c.JSON(http.StatusOK, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    nil,
+	})
+}
+
+func editAddress(c *gin.Context) {
+	username := c.Query("username")
+	houseID := c.Query("house")
+	err := model.EditAddress(username, houseID)
+	if err != nil {
+		c.JSON(http.StatusOK, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    nil,
+	})
+
+}
+
+func editPhone(c *gin.Context) {
+	username := c.Query("username")
+	houseID := c.Query("house")
+	err := model.EditPhone(username, houseID)
+	if err != nil {
+		c.JSON(http.StatusOK, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    nil,
+	})
+
+}
+
 func UserRouters(engine *gin.Engine) {
 	group := engine.Group("/user")
 	{
@@ -223,7 +297,11 @@ func UserRouters(engine *gin.Engine) {
 		group.GET("/login", userLogin)
 		group.POST("/register", userRegister)
 		group.POST("/info", editUserInfo)
-		group.POST("/password", editUserPassword)
+		group.GET("/editpassword", editUserPassword)
 		group.GET("/houseid", getHouseId)
+		group.GET("/edithouseid", editHouseId)
+		group.GET("/editaddress", editAddress)
+		group.GET("/editphone", editPhone)
+		group.GET("/editnickname", editNickname)
 	}
 }
