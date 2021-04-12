@@ -287,7 +287,6 @@ func editPhone(c *gin.Context) {
 		Message: util.RequestSuccess,
 		Data:    nil,
 	})
-
 }
 
 func UserRouters(engine *gin.Engine) {
@@ -297,8 +296,8 @@ func UserRouters(engine *gin.Engine) {
 		group.GET("/login", userLogin)
 		group.POST("/register", userRegister)
 		group.POST("/info", editUserInfo)
-		group.GET("/editpassword", editUserPassword)
 		group.GET("/houseid", getHouseId)
+		group.GET("/editpassword", editUserPassword)
 		group.GET("/edithouseid", editHouseId)
 		group.GET("/editaddress", editAddress)
 		group.GET("/editphone", editPhone)

@@ -43,7 +43,7 @@ func init() {
 	util.MySqlInit(config)
 	util.RedisInit()
 	util.CronInit()
-	err = util.C.AddFunc("0 0 0 1/1 * ? *", func() {
+	err = util.C.AddFunc("0 0 0/1 * * ? ", func() {
 		model.CronProperty()
 	})
 	util.ErrorHandler(err)

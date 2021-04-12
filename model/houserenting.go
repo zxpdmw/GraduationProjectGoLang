@@ -59,7 +59,7 @@ func RentSaleAll() (data []HouseRentSale, err error) {
 
 //删除租售房信息
 func DeleteHouseRentSale(id int) (err error) {
-	err = util.Db.Table("t_house_renting").Model(&HouseRentSale{}).Where("id=?", id).Delete(&HouseRentSale{}).Error
+	err = util.Db.Table("t_house_renting").Where("id=?", id).Delete(&HouseRentSale{}).Error
 	if err != nil {
 		return
 	}

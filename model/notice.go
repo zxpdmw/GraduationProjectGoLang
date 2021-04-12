@@ -29,7 +29,6 @@ func RecommendNotice() (data []Notice, err error) {
 
 //获取公告详情
 func DetailNotice(title string) (data Notice, err error) {
-
 	find := util.Db.Table("t_notice").Where("title=?", title).Find(&data).Error
 	if find != nil {
 		return

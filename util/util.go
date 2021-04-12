@@ -99,7 +99,9 @@ func RedisInit() {
 }
 
 func ErrorHandler(err error) {
-	Logger.Error("happer error", zap.Error(err))
+	if err != nil {
+		Logger.Error("happer error", zap.Error(err))
+	}
 }
 
 func InitLogger() {

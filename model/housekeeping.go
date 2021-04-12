@@ -20,9 +20,13 @@ func (HouseKeeping) TableName() string {
 	return "t_house_keeping"
 }
 
-func AddHouseKeeping(keeping HouseKeeping) (err error) {
+func AddHouseKeeping(keeping HouseKeeping) (ks []HouseKeeping, err error) {
 	keeping.Status = "未处理"
 	err = util.Db.Table("t_house_keeping").Create(&keeping).Error
+	if err != nil {
+		return
+	}
+	err = util.Db.Table("t_house_keeping").Where("username=?", keeping.Username).Find(&ks).Error
 	if err != nil {
 		return
 	}

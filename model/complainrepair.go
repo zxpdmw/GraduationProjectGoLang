@@ -27,9 +27,13 @@ func EditComplainRepairStatus(id int) (err error) {
 }
 
 //添加投诉报修
-func AddTB(tb ComplainRepair) (err error) {
+func AddTB(tb ComplainRepair) (tbs []ComplainRepair, err error) {
 	tb.Status = "未处理"
 	err = util.Db.Table("t_complain_repair").Create(&tb).Error
+	if err != nil {
+		return
+	}
+	err = util.Db.Table("t_complain_repair").Where("username=?", tb.Username).Find(&tbs).Error
 	if err != nil {
 		return
 	}
