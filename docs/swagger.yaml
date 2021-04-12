@@ -155,7 +155,7 @@ definitions:
 info:
   contact: {}
   license:
-    name: 张惟宇
+    name: 一生一个张小培
   title: 社区便民服务接口
   version: "1.0"
 paths:
@@ -294,6 +294,27 @@ paths:
       summary: addComplainRepair
       tags:
       - 投诉报修模块
+  /complainrepair/delete:
+    get:
+      description: 撤销投诉或者报修
+      parameters:
+      - description: 投诉报修记录唯一ID
+        in: query
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: deleteComplainRepair
+      tags:
+      - 投诉报修模块
   /complainrepair/get:
     get:
       description: 获取本人的投诉报修
@@ -341,14 +362,9 @@ paths:
     get:
       description: 如果用户不需要已申请的家政服务，可以选择取消，
       parameters:
-      - description: 用户账户
+      - description: 家政服务记录唯一ID
         in: query
-        name: username
-        required: true
-        type: string
-      - description: 家政服务类型
-        in: query
-        name: hk_type
+        name: id
         required: true
         type: string
       responses:
@@ -620,6 +636,136 @@ paths:
       summary: payProperty
       tags:
       - 物业费模块
+  /user/editaddress:
+    get:
+      description: 修改用户的地址
+      parameters:
+      - description: 账号
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 地址
+        in: query
+        name: address
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: editAddress
+      tags:
+      - 用户模块
+  /user/edithouseid:
+    get:
+      description: 修改用户的房屋号
+      parameters:
+      - description: 账号
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 房屋号
+        in: query
+        name: house
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: editHouseId
+      tags:
+      - 用户模块
+  /user/editnickname:
+    get:
+      description: 修改用户的昵称
+      parameters:
+      - description: 账号
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 昵称
+        in: query
+        name: nickname
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: editNickname
+      tags:
+      - 用户模块
+  /user/editpassword:
+    post:
+      description: 修改用户密码
+      parameters:
+      - description: 账号
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: editUserPassword
+      tags:
+      - 用户模块
+  /user/editphone:
+    get:
+      description: 修改用户的电话
+      parameters:
+      - description: 账号
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 电话
+        in: query
+        name: phone
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: editPhone
+      tags:
+      - 用户模块
   /user/get:
     get:
       description: 获取用户信息根据username
@@ -639,6 +785,27 @@ paths:
           schema:
             $ref: '#/definitions/util.Response'
       summary: getUserInfo
+      tags:
+      - 用户模块
+  /user/houseid:
+    get:
+      description: 根据username获取房屋号
+      parameters:
+      - description: 账号
+        in: query
+        name: username
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: getHouseId
       tags:
       - 用户模块
   /user/info:
@@ -687,28 +854,6 @@ paths:
           schema:
             $ref: '#/definitions/util.Response'
       summary: userLogin
-      tags:
-      - 用户模块
-  /user/password:
-    post:
-      description: 修改用户密码
-      parameters:
-      - description: User结构体只包含username和password
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/model.User'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/util.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/util.Response'
-      summary: editUserPassword
       tags:
       - 用户模块
   /user/register:

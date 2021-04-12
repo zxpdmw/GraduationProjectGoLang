@@ -29,25 +29,18 @@ func RecommendNotice() (data []Notice, err error) {
 
 //获取公告详情
 func DetailNotice(title string) (data Notice, err error) {
-	find := util.Db.Table("t_notice").Where("title=?", title).Find(&data).Error
-	if find != nil {
-		return
-	}
+	err = util.Db.Table("t_notice").Where("title=?", title).Find(&data).Error
 	return
 }
 
 //删除公告
 func DeleteNotice(title string) (err error) {
-	tx := util.Db.Table("t_notice").Where("title=?", title).Delete(&Notice{}).Error
-	if tx != nil {
-		return
-	}
+	err = util.Db.Table("t_notice").Where("title=?", title).Delete(&Notice{}).Error
 	return
 }
 
 //发布公告
 func PublishNotice(title, content, publisher string) (err error) {
-
 	var n = Notice{
 		Publisher:   publisher,
 		Title:       title,
@@ -55,9 +48,6 @@ func PublishNotice(title, content, publisher string) (err error) {
 		PublishTime: time.Now().Format("2006-01-02 15:04:05"),
 	}
 	err = util.Db.Table("t_notice").Create(&n).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
@@ -66,9 +56,6 @@ func EditNotice() {
 }
 
 func GetAllNotice() (data []Notice, err error) {
-	find := util.Db.Table("t_notice").Find(&data).Error
-	if find != nil {
-		return
-	}
+	err = util.Db.Table("t_notice").Find(&data).Error
 	return
 }

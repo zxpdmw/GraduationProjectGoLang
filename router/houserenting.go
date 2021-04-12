@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"graduationproject/model"
 	"graduationproject/util"
-	"strconv"
 )
 
 func HouseRentingRouters(e *gin.Engine) {
@@ -99,9 +98,8 @@ func RentSale(c *gin.Context) {
 //@Failure 500 {object} util.Response
 //@Router /houserentsale/delete [get]
 func DeleteHouseById(c *gin.Context) {
-	query := c.Query("id")
-	atoi, _ := strconv.Atoi(query)
-	err := model.DeleteHouseRentSale(atoi)
+	id := c.Query("id")
+	err := model.DeleteHouseRentSale(id)
 	if err != nil {
 		c.JSON(200, util.Response{
 			Code:    555,

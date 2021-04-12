@@ -1,7 +1,6 @@
 package model
 
 import (
-	"github.com/pkg/errors"
 	"graduationproject/util"
 )
 
@@ -23,44 +22,26 @@ func (HouseKeeping) TableName() string {
 func AddHouseKeeping(keeping HouseKeeping) (ks []HouseKeeping, err error) {
 	keeping.Status = "未处理"
 	err = util.Db.Table("t_house_keeping").Create(&keeping).Error
-	if err != nil {
-		return
-	}
 	err = util.Db.Table("t_house_keeping").Where("username=?", keeping.Username).Find(&ks).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 func GetAllHouseKeeping() (data []HouseKeeping, err error) {
 	err = util.Db.Find(&data).Error
-	if err != nil {
-		return data, errors.Wrap(err, "GetAllHouseKeepingFail")
-	}
 	return
 }
 
 func EditHouseKeepingStatus(id int) (err error) {
 	err = util.Db.Table("t_house_keeping").Where("id=?", id).Update("status", "已处理").Error
-	if err != nil {
-		return err
-	}
-	return err
+	return
 }
 
 func GetHouseKeepingByUsername(username string) (data []HouseKeeping, err error) {
 	err = util.Db.Table("t_house_keeping").Where("username=?", username).Find(&data).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
-func DeleteHouseKeeping(hkTyepe, username string) (err error) {
-	err = util.Db.Table("t_house_keeping").Where("username=?", username).Where("hk_type=?", hkTyepe).Error
-	if err != nil {
-		return err
-	}
-	return err
+func DeleteHouseKeeping(id string) (err error) {
+	err = util.Db.Table("t_house_keeping").Where("id=?", id).Delete(&HouseKeeping{}).Error
+	return
 }

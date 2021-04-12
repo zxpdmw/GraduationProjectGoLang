@@ -33,45 +33,30 @@ func (HouseRentSale) TableName() string {
 //获取全部租房信息
 func RentAll() (data []HouseRentSale, err error) {
 	err = util.Db.Table("t_house_renting").Where("hr_type=?", "rent").Find(&data).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 //获取全部售房信息
 func SaleAll() (data []HouseRentSale, err error) {
 	err = util.Db.Table("t_house_renting").Where("hr_type=?", "sale").Find(&data).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 //获取全部租售房信息
 func RentSaleAll() (data []HouseRentSale, err error) {
 	err = util.Db.Table("t_house_renting").Find(&data).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 //删除租售房信息
-func DeleteHouseRentSale(id int) (err error) {
+func DeleteHouseRentSale(id string) (err error) {
 	err = util.Db.Table("t_house_renting").Where("id=?", id).Delete(&HouseRentSale{}).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 //发布房屋信息
 func PublishHouse(rent HouseRentSale) (err error) {
 	err = util.Db.Table("t_house_renting").Create(&rent).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
@@ -88,16 +73,10 @@ func EditHouseInfo(rent EditHouse) (err error) {
 		Price:    rent.Price,
 	}
 	err = util.Db.Table("t_house_renting").Updates(&hr).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 func GetByUsername(username string) (house []HouseRentSale, err error) {
 	err = util.Db.Table("t_house_renting").Where("username=?", username).Find(&house).Error
-	if err != nil {
-		return
-	}
 	return
 }

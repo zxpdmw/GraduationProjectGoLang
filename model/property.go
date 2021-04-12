@@ -17,10 +17,7 @@ func (Property) TableName() string {
 
 //获取每间房屋剩余的物业费
 func GetPropertyByHouseId(houseId string) (data float32, err error) {
-	find := util.Db.Table("t_property").Model(&User{}).Select("balance").Where("house_id=?", houseId).Find(&data).Error
-	if find != nil {
-		return
-	}
+	err = util.Db.Table("t_property").Model(&User{}).Select("balance").Where("house_id=?", houseId).Find(&data).Error
 	return
 }
 
@@ -33,9 +30,6 @@ func PayProperty(property float32, houseId string) (err error) {
 //注册用户将用户和houseId绑定并插入property表，每个用户默认物业费500.00
 func UserBindHouseID(property Property) (err error) {
 	err = util.Db.Table("t_property").Create(&property).Error
-	if err != nil {
-		return err
-	}
 	return err
 }
 

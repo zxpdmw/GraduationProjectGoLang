@@ -145,10 +145,11 @@ func editUserInfo(c *gin.Context) {
 //@Summary editUserPassword
 //@Description 修改用户密码
 //@Tags 用户模块
-//@Param user body model.User true "User结构体只包含username和password"
+//@Param username query string true "账号"
+//@Param password query string true "密码"
 //@Success 200 {object} util.Response
 //@Failure 500 {object} util.Response
-//@Router /user/password [post]
+//@Router /user/editpassword [post]
 func editUserPassword(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
@@ -193,6 +194,13 @@ func getInfo(c *gin.Context) {
 	})
 }
 
+//@Summary getHouseId
+//@Tags 用户模块
+//@Description 根据username获取房屋号
+//@Param username query string true "账号"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /user/houseid [get]
 func getHouseId(c *gin.Context) {
 	query := c.Query("username")
 	id, err := model.GetHouseId(query)
@@ -211,6 +219,14 @@ func getHouseId(c *gin.Context) {
 	})
 }
 
+//@Summary editHouseId
+//@Tags 用户模块
+//@Description 修改用户的房屋号
+//@Param username query string true "账号"
+//@Param house query string true "房屋号"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /user/edithouseid [get]
 func editHouseId(c *gin.Context) {
 	username := c.Query("username")
 	houseID := c.Query("house")
@@ -231,6 +247,14 @@ func editHouseId(c *gin.Context) {
 
 }
 
+//@Summary editNickname
+//@Tags 用户模块
+//@Description 修改用户的昵称
+//@Param username query string true "账号"
+//@Param nickname query string true "昵称"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /user/editnickname [get]
 func editNickname(c *gin.Context) {
 	username := c.Query("username")
 	nickname := c.Query("nickname")
@@ -250,9 +274,17 @@ func editNickname(c *gin.Context) {
 	})
 }
 
+//@Summary editAddress
+//@Tags 用户模块
+//@Description 修改用户的地址
+//@Param username query string true "账号"
+//@Param address query string true "地址"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /user/editaddress [get]
 func editAddress(c *gin.Context) {
 	username := c.Query("username")
-	houseID := c.Query("house")
+	houseID := c.Query("address")
 	err := model.EditAddress(username, houseID)
 	if err != nil {
 		c.JSON(http.StatusOK, util.Response{
@@ -270,9 +302,17 @@ func editAddress(c *gin.Context) {
 
 }
 
+//@Summary editPhone
+//@Tags 用户模块
+//@Description 修改用户的电话
+//@Param username query string true "账号"
+//@Param phone query string true "电话"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /user/editphone [get]
 func editPhone(c *gin.Context) {
 	username := c.Query("username")
-	houseID := c.Query("house")
+	houseID := c.Query("phone")
 	err := model.EditPhone(username, houseID)
 	if err != nil {
 		c.JSON(http.StatusOK, util.Response{

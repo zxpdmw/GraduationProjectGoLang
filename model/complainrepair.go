@@ -20,40 +20,30 @@ func (ComplainRepair) TableName() string {
 //修改后台投诉报修处理的状态
 func EditComplainRepairStatus(id int) (err error) {
 	err = util.Db.Table("t_complain_repair").Where("id=?", id).Update("status", "已处理").Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 //添加投诉报修
-func AddTB(tb ComplainRepair) (tbs []ComplainRepair, err error) {
-	tb.Status = "未处理"
-	err = util.Db.Table("t_complain_repair").Create(&tb).Error
-	if err != nil {
-		return
-	}
-	err = util.Db.Table("t_complain_repair").Where("username=?", tb.Username).Find(&tbs).Error
-	if err != nil {
-		return
-	}
+func AddCR(cr ComplainRepair) (data []ComplainRepair, err error) {
+	cr.Status = "未处理"
+	err = util.Db.Table("t_complain_repair").Create(&cr).Error
+	err = util.Db.Table("t_complain_repair").Where("username=?", cr.Username).Find(&data).Error
 	return
 }
 
 //获取user添加的投诉保修
-func GetTBByUsername(username string) (data []ComplainRepair, err error) {
+func GetCRByUsername(username string) (data []ComplainRepair, err error) {
 	err = util.Db.Table("t_complain_repair").Where("username=?", username).Find(&data).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 //管理员获取全部的投诉报修
 func GetAllCR() (data []ComplainRepair, err error) {
 	err = util.Db.Table("t_complain_repair").Find(&data).Error
-	if err != nil {
-		return
-	}
+	return
+}
+
+func DeleteCRById(id string) (err error) {
+	err = util.Db.Table("t_complain_repair").Where("id=?", id).Delete(&ComplainRepair{}).Error
 	return
 }

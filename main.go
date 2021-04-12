@@ -41,7 +41,7 @@ func init() {
 		Dbname:   viper.GetString("db.dbname"),
 	}
 	util.MySqlInit(config)
-	util.RedisInit()
+	//util.RedisInit()
 	util.CronInit()
 	err = util.C.AddFunc("0 0 0/1 * * ? ", func() {
 		model.CronProperty()
@@ -52,7 +52,7 @@ func init() {
 
 //@title 社区便民服务接口
 //@version 1.0
-//@license.name 张惟宇
+//@license.name 一生一个张小培
 func main() {
 	server := gin.Default()
 	fs, err := template.ParseFS(tmpl, "templates/*.gohtml")

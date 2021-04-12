@@ -75,15 +75,13 @@ func getHouseKeepingByUsername(c *gin.Context) {
 //@Summary deleteHouseKeeping
 //@Tags 家政服务模块
 //@Description 如果用户不需要已申请的家政服务，可以选择取消，
-//@Param username query string true "用户账户"
-//@Param hk_type query string true "家政服务类型"
+//@Param id query string true "家政服务记录唯一ID"
 //@Success 200 {object} util.Response
 //@Failure 500 {object} util.Response
 //@Router /housekeeping/delete [get]
 func deleteHouseKeeping(c *gin.Context) {
-	query := c.Query("username")
-	s := c.Query("hk_type")
-	err := model.DeleteHouseKeeping(s, query)
+	id := c.Query("id")
+	err := model.DeleteHouseKeeping(id)
 	if err != nil {
 		c.JSON(200, util.Response{
 			Code:    555,

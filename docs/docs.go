@@ -20,7 +20,7 @@ var doc = `{
         "title": "{{.Title}}",
         "contact": {},
         "license": {
-            "name": "张惟宇"
+            "name": "一生一个张小培"
         },
         "version": "{{.Version}}"
     },
@@ -233,6 +233,38 @@ var doc = `{
                 }
             }
         },
+        "/complainrepair/delete": {
+            "get": {
+                "description": "撤销投诉或者报修",
+                "tags": [
+                    "投诉报修模块"
+                ],
+                "summary": "deleteComplainRepair",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "投诉报修记录唯一ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/complainrepair/get": {
             "get": {
                 "description": "获取本人的投诉报修",
@@ -309,15 +341,8 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "用户账户",
-                        "name": "username",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "家政服务类型",
-                        "name": "hk_type",
+                        "description": "家政服务记录唯一ID",
+                        "name": "id",
                         "in": "query",
                         "required": true
                     }
@@ -731,6 +756,201 @@ var doc = `{
                 }
             }
         },
+        "/user/editaddress": {
+            "get": {
+                "description": "修改用户的地址",
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "editAddress",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "账号",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "地址",
+                        "name": "address",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/edithouseid": {
+            "get": {
+                "description": "修改用户的房屋号",
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "editHouseId",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "账号",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "房屋号",
+                        "name": "house",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/editnickname": {
+            "get": {
+                "description": "修改用户的昵称",
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "editNickname",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "账号",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "昵称",
+                        "name": "nickname",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/editpassword": {
+            "post": {
+                "description": "修改用户密码",
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "editUserPassword",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "账号",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/editphone": {
+            "get": {
+                "description": "修改用户的电话",
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "editPhone",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "账号",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "电话",
+                        "name": "phone",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/user/get": {
             "get": {
                 "description": "获取用户信息根据username",
@@ -742,6 +962,38 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "用户账户",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/houseid": {
+            "get": {
+                "description": "根据username获取房屋号",
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "getHouseId",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "账号",
                         "name": "username",
                         "in": "query",
                         "required": true
@@ -818,40 +1070,6 @@ var doc = `{
                         "name": "password",
                         "in": "query",
                         "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/password": {
-            "post": {
-                "description": "修改用户密码",
-                "tags": [
-                    "用户模块"
-                ],
-                "summary": "editUserPassword",
-                "parameters": [
-                    {
-                        "description": "User结构体只包含username和password",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.User"
-                        }
                     }
                 ],
                 "responses": {

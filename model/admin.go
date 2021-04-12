@@ -27,8 +27,5 @@ func AdminRegister(username, password string) (err error) {
 		Password: password,
 	}
 	err = util.Db.Create(&a).Error
-	if err != nil {
-		return
-	}
 	return
 }

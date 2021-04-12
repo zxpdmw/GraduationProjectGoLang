@@ -47,30 +47,17 @@ func Register(register UserRegister) (err error) {
 		HouseId:  register.HouseId,
 	}
 	err = util.Db.Create(&u).Error
-	if err != nil {
-		return
-	}
-	_, f := GetPropertyByHouseId(register.HouseId)
-	if f != nil {
-		return
-	}
-	//util.Rdb.Set(register.HouseId, id, 0)
+	_, err = GetPropertyByHouseId(register.HouseId)
 	return
 }
 
 func EditInfo(u User) (err error) {
 	err = util.Db.Model(&User{}).Where("username=?", u.Username).Updates(&u).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 func EditPassword(username, password string) (err error) {
 	err = util.Db.Table("t_user").Where("username=?", username).Update("password", password).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
@@ -79,56 +66,35 @@ func GetInfo(username string) (data UserInfo, err error) {
 		Select("username,nickname,house_id,address,phone").
 		Where("username=?", username).
 		Find(&data).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 func CheckUserExist(username string) (sum int64, err error) {
 	err = util.Db.Table("t_user").Where("username=?", username).Count(&sum).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 func GetHouseId(usernaem string) (houseId string, err error) {
 	err = util.Db.Table("t_user").Select("house_id").Where("username=?", usernaem).Find(&houseId).Error
-	if err != nil {
-		return
-	}
 	return
 }
 
 func EditNickname(username, nickname string) (err error) {
 	err = util.Db.Table("t_user").Where("username=?", username).Update("nickname", nickname).Error
-	if err != nil {
-		return err
-	}
-	return err
+	return
 }
 
 func EditAddress(username, address string) (err error) {
 	err = util.Db.Table("t_user").Where("username=?", username).Update("address", address).Error
-	if err != nil {
-		return err
-	}
-	return err
+	return
 }
 
 func EditPhone(username, phone string) (err error) {
 	err = util.Db.Table("t_user").Where("username=?", username).Update("phone", phone).Error
-	if err != nil {
-		return err
-	}
-	return err
+	return
 }
 
 func EditHouseID(username, house string) (err error) {
 	err = util.Db.Table("t_user").Where("username=?", username).Update("house_id", house).Error
-	if err != nil {
-		return err
-	}
-	return err
+	return
 }

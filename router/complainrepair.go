@@ -11,8 +11,7 @@ func ComplainRepairRouters(e *gin.Engine) {
 	{
 		group.POST("/add", addComplainRepair)
 		group.GET("/get", getComplainRepairByUsername)
-		group.GET("/complain")
-		group.GET("repair")
+		group.GET("/delete", deleteComplainRepair)
 	}
 
 }
@@ -25,8 +24,8 @@ func ComplainRepairRouters(e *gin.Engine) {
 //@Failure 500 {object} util.Response
 //@Router /complainrepair/add [post]
 func addComplainRepair(c *gin.Context) {
-	var tb model.ComplainRepair
-	if err := c.ShouldBindJSON(&tb); err != nil {
+	var cr model.ComplainRepair
+	if err := c.ShouldBindJSON(&cr); err != nil {
 		c.JSON(200, util.Response{
 			Code:    555,
 			Message: util.ComplainRepairFail,
@@ -34,7 +33,7 @@ func addComplainRepair(c *gin.Context) {
 		})
 		return
 	}
-	addTB, err := model.AddTB(tb)
+	data, err := model.AddCR(cr)
 	if err != nil {
 		c.JSON(200, util.Response{
 			Code:    555,
@@ -46,7 +45,7 @@ func addComplainRepair(c *gin.Context) {
 	c.JSON(200, util.Response{
 		Code:    666,
 		Message: util.ComplainRepairSuccess,
-		Data:    addTB,
+		Data:    data,
 	})
 }
 
@@ -59,7 +58,7 @@ func addComplainRepair(c *gin.Context) {
 //@Router /complainrepair/get [get]
 func getComplainRepairByUsername(c *gin.Context) {
 	query := c.Query("username")
-	data, err := model.GetTBByUsername(query)
+	data, err := model.GetCRByUsername(query)
 	if err != nil {
 		c.JSON(200, util.Response{
 			Code:    555,
@@ -73,4 +72,30 @@ func getComplainRepairByUsername(c *gin.Context) {
 		Message: util.GetDataSuccess,
 		Data:    data,
 	})
+}
+
+//@Summary deleteComplainRepair
+//@Description 撤销投诉或者报修
+//@Tags 投诉报修模块
+//@Param id query string true "投诉报修记录唯一ID"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /complainrepair/delete [get]
+func deleteComplainRepair(c *gin.Context) {
+	id := c.Query("id")
+	err := model.DeleteCRById(id)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.GetDataFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    nil,
+	})
+
 }
