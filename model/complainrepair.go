@@ -24,10 +24,9 @@ func EditComplainRepairStatus(id int) (err error) {
 }
 
 //添加投诉报修
-func AddCR(cr ComplainRepair) (data []ComplainRepair, err error) {
+func AddCR(cr ComplainRepair) (err error) {
 	cr.Status = "未处理"
 	err = util.Db.Table("t_complain_repair").Create(&cr).Error
-	err = util.Db.Table("t_complain_repair").Where("username=?", cr.Username).Find(&data).Error
 	return
 }
 

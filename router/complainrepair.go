@@ -33,7 +33,7 @@ func addComplainRepair(c *gin.Context) {
 		})
 		return
 	}
-	data, err := model.AddCR(cr)
+	err := model.AddCR(cr)
 	if err != nil {
 		c.JSON(200, util.Response{
 			Code:    555,
@@ -45,7 +45,7 @@ func addComplainRepair(c *gin.Context) {
 	c.JSON(200, util.Response{
 		Code:    666,
 		Message: util.ComplainRepairSuccess,
-		Data:    data,
+		Data:    nil,
 	})
 }
 

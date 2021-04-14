@@ -31,7 +31,7 @@ func addHouseKeeping(c *gin.Context) {
 			Data:    nil,
 		})
 	}
-	ks, err := model.AddHouseKeeping(hk)
+	err := model.AddHouseKeeping(hk)
 	if err != nil {
 		c.JSON(200, util.Response{
 			Code:    555,
@@ -42,7 +42,7 @@ func addHouseKeeping(c *gin.Context) {
 	c.JSON(200, util.Response{
 		Code:    666,
 		Message: util.RequestSuccess,
-		Data:    ks,
+		Data:    nil,
 	})
 }
 
