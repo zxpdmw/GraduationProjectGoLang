@@ -16,6 +16,7 @@ func HouseRentingRouters(e *gin.Engine) {
 		group.POST("/edit", editHouse)
 		group.GET("/delete", DeleteHouseById)
 		group.GET("/get", getByUsername)
+		group.GET("editprice", editHousePrice)
 	}
 }
 
@@ -165,6 +166,25 @@ func editHouse(c *gin.Context) {
 		})
 	}
 	err := model.EditHouseInfo(s)
+	if err != nil {
+		c.JSON(200, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    nil,
+	})
+}
+
+func editHousePrice(c *gin.Context) {
+	id := c.Query("id")
+	price := c.Query("price")
+	err := model.EditHousePrice(id, price)
 	if err != nil {
 		c.JSON(200, util.Response{
 			Code:    555,

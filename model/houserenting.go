@@ -80,3 +80,8 @@ func GetByUsername(username string) (house []HouseRentSale, err error) {
 	err = util.Db.Table("t_house_renting").Where("username=?", username).Find(&house).Error
 	return
 }
+
+func EditHousePrice(id string, price string) (err error) {
+	err = util.Db.Table("t_house_renting").Where("id=?", id).Update("price", price).Error
+	return
+}
