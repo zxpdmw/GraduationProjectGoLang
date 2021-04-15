@@ -329,6 +329,13 @@ func editPhone(c *gin.Context) {
 	})
 }
 
+//@Summary allHouse
+//@Tags 用户模块
+//@Description 获取某个用户发布的房源信息
+//@Param username query string true "账号"
+//@Success 200 {object} util.Response
+//@Failure 500 {object} util.Response
+//@Router /user/allhouse [get]
 func allhouse(c *gin.Context) {
 	username := c.Query("username")
 	rent, err := model.GetRentByUsername(username)

@@ -22,29 +22,6 @@ definitions:
         description: 投诉报修者账户
         type: string
     type: object
-  model.EditHouse:
-    properties:
-      address:
-        description: 房屋地址
-        type: string
-      hr_type:
-        description: 房屋类型 租还是售
-        type: string
-      id:
-        type: string
-      message:
-        description: 房屋信息
-        type: string
-      phone:
-        description: 联系方式
-        type: string
-      price:
-        description: 房屋价格
-        type: string
-      username:
-        description: 发布者
-        type: string
-    type: object
   model.HouseKeeping:
     properties:
       address:
@@ -65,24 +42,31 @@ definitions:
         description: 用户账户
         type: string
     type: object
-  model.HouseRentSale:
+  model.HouseSaleRent:
     properties:
       address:
         description: 房屋地址
         type: string
-      hr_type:
-        description: 房屋类型 租还是售
+      area:
+        type: string
+      floor:
         type: string
       id:
         type: integer
       message:
         description: 房屋信息
         type: string
+      orientation:
+        type: string
       phone:
         description: 联系方式
         type: string
       price:
         description: 房屋价格
+        type: string
+      ruzhu:
+        type: string
+      t:
         type: string
       username:
         description: 发布者
@@ -400,116 +384,6 @@ paths:
       summary: getHouseKeepingByUsername
       tags:
       - 家政服务模块
-  /houserentsale/all:
-    get:
-      description: 获取全部的房屋信息
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/util.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/util.Response'
-      summary: RentSale
-      tags:
-      - 房屋租售模块
-  /houserentsale/delete:
-    get:
-      description: 根据ID删除房屋
-      parameters:
-      - description: 房屋主键ID
-        in: query
-        name: id
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/util.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/util.Response'
-      summary: DeleteHouseRentSale
-      tags:
-      - 房屋租售模块
-  /houserentsale/edit:
-    post:
-      description: 修改房屋信息
-      parameters:
-      - description: 修改房屋信息结构体
-        in: body
-        name: editHouse
-        required: true
-        schema:
-          $ref: '#/definitions/model.EditHouse'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/util.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/util.Response'
-      summary: editHouse
-      tags:
-      - 房屋租售模块
-  /houserentsale/publish:
-    post:
-      description: 发布房屋租售信息
-      parameters:
-      - description: 房屋租售结构体
-        in: body
-        name: houseRent
-        required: true
-        schema:
-          $ref: '#/definitions/model.HouseRentSale'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/util.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/util.Response'
-      summary: publishHouse
-      tags:
-      - 房屋租售模块
-  /houserentsale/rent:
-    get:
-      description: 获取全部租房信息
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/util.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/util.Response'
-      summary: Rent
-      tags:
-      - 房屋租售模块
-  /houserentsale/sale:
-    get:
-      description: 获取全部的售房信息
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/util.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/util.Response'
-      summary: Sale
-      tags:
-      - 房屋租售模块
   /notice/delete:
     get:
       description: 删除公告根据标题
@@ -636,6 +510,195 @@ paths:
       summary: payProperty
       tags:
       - 物业费模块
+  /rent/all:
+    get:
+      description: 获取全部租房信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Rent
+      tags:
+      - 房屋租售模块
+  /rent/delete:
+    get:
+      description: 根据ID删除房屋
+      parameters:
+      - description: 房屋主键ID
+        in: query
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: DeleteHouseRentSale
+      tags:
+      - 房屋租售模块
+  /rent/editprice:
+    get:
+      description: 修改房屋价格
+      parameters:
+      - description: 房屋唯一ID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 新的房屋价格
+        in: query
+        name: price
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: editHousePrice
+      tags:
+      - 房屋租售模块
+  /rent/publish:
+    post:
+      description: 发布房屋租售信息
+      parameters:
+      - description: 房屋租售结构体
+        in: body
+        name: houseRent
+        required: true
+        schema:
+          $ref: '#/definitions/model.HouseSaleRent'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: publishHouse
+      tags:
+      - 房屋租售模块
+  /sale/all:
+    get:
+      description: 获取全部的售房信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Sale
+      tags:
+      - 房屋租售模块
+  /sale/delete:
+    get:
+      description: 根据ID删除房屋
+      parameters:
+      - description: 房屋主键ID
+        in: query
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: DeleteHouseRentSale
+      tags:
+      - 房屋租售模块
+  /sale/editprice:
+    get:
+      description: 修改房屋价格
+      parameters:
+      - description: 房屋唯一ID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 新的房屋价格
+        in: query
+        name: price
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: editHousePrice
+      tags:
+      - 房屋租售模块
+  /sale/publish:
+    post:
+      description: 发布房屋租售信息
+      parameters:
+      - description: 房屋租售结构体
+        in: body
+        name: houseRent
+        required: true
+        schema:
+          $ref: '#/definitions/model.HouseSaleRent'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: publishHouse
+      tags:
+      - 房屋租售模块
+  /user/allhouse:
+    get:
+      description: 获取某个用户发布的房源信息
+      parameters:
+      - description: 账号
+        in: query
+        name: username
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: allHouse
+      tags:
+      - 用户模块
   /user/editaddress:
     get:
       description: 修改用户的地址

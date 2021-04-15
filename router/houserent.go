@@ -21,7 +21,7 @@ func HouseRentRouters(e *gin.Engine) {
 //@Description 获取全部租房信息
 //@Success 200 {object} util.Response
 //@Failure 500 {object} util.Response
-//@Router /houserentsale/rent [get]
+//@Router /rent/all [get]
 func Rent(c *gin.Context) {
 	data, err := model.RentAll()
 	if err != nil {
@@ -47,7 +47,7 @@ func Rent(c *gin.Context) {
 //@Param id query string true "房屋主键ID"
 //@Success 200 {object} util.Response
 //@Failure 500 {object} util.Response
-//@Router /houserentsale/delete [get]
+//@Router /rent/delete [get]
 func DeleteRentHouseById(c *gin.Context) {
 	id := c.Query("id")
 	err := model.DeleteHouseRent(id)
@@ -70,10 +70,10 @@ func DeleteRentHouseById(c *gin.Context) {
 //@Summary publishHouse
 //@Tags 房屋租售模块
 //@Description 发布房屋租售信息
-//@Param houseRent body model.HouseRentSale true "房屋租售结构体"
+//@Param houseRent body model.HouseSaleRent true "房屋租售结构体"
 //@Success 200 {object} util.Response
 //@Failure 500 {object} util.Response
-//@Router /houserentsale/publish [post]
+//@Router /rent/publish [post]
 func publisRenthHouse(c *gin.Context) {
 	s := model.HouseSaleRent{}
 	if err := c.ShouldBindJSON(&s); err != nil {
@@ -100,13 +100,13 @@ func publisRenthHouse(c *gin.Context) {
 }
 
 //@Summary editHousePrice
-//@Tags 房屋租赁模块
+//@Tags 房屋租售模块
 //@Description 修改房屋价格
 //@Param id query string true "房屋唯一ID"
 //@Param price query string true "新的房屋价格"
 //@Success 200 {object} util.Response
 //@Failure 500 {object} util.Response
-//@Router /houserentsale/editprice [get]
+//@Router /rent/editprice [get]
 func editHouseRentPrice(c *gin.Context) {
 	id := c.Query("id")
 	price := c.Query("price")

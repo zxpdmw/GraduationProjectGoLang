@@ -377,175 +377,6 @@
                 }
             }
         },
-        "/houserentsale/all": {
-            "get": {
-                "description": "获取全部的房屋信息",
-                "tags": [
-                    "房屋租售模块"
-                ],
-                "summary": "RentSale",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/houserentsale/delete": {
-            "get": {
-                "description": "根据ID删除房屋",
-                "tags": [
-                    "房屋租售模块"
-                ],
-                "summary": "DeleteHouseRentSale",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "房屋主键ID",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/houserentsale/edit": {
-            "post": {
-                "description": "修改房屋信息",
-                "tags": [
-                    "房屋租售模块"
-                ],
-                "summary": "editHouse",
-                "parameters": [
-                    {
-                        "description": "修改房屋信息结构体",
-                        "name": "editHouse",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.EditHouse"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/houserentsale/publish": {
-            "post": {
-                "description": "发布房屋租售信息",
-                "tags": [
-                    "房屋租售模块"
-                ],
-                "summary": "publishHouse",
-                "parameters": [
-                    {
-                        "description": "房屋租售结构体",
-                        "name": "houseRent",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.HouseRentSale"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/houserentsale/rent": {
-            "get": {
-                "description": "获取全部租房信息",
-                "tags": [
-                    "房屋租售模块"
-                ],
-                "summary": "Rent",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/houserentsale/sale": {
-            "get": {
-                "description": "获取全部的售房信息",
-                "tags": [
-                    "房屋租售模块"
-                ],
-                "summary": "Sale",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/util.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/notice/delete": {
             "get": {
                 "description": "删除公告根据标题",
@@ -718,6 +549,294 @@
                         "type": "string",
                         "description": "缴纳金额",
                         "name": "property",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/rent/all": {
+            "get": {
+                "description": "获取全部租房信息",
+                "tags": [
+                    "房屋租售模块"
+                ],
+                "summary": "Rent",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/rent/delete": {
+            "get": {
+                "description": "根据ID删除房屋",
+                "tags": [
+                    "房屋租售模块"
+                ],
+                "summary": "DeleteHouseRentSale",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "房屋主键ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/rent/editprice": {
+            "get": {
+                "description": "修改房屋价格",
+                "tags": [
+                    "房屋租售模块"
+                ],
+                "summary": "editHousePrice",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "房屋唯一ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "新的房屋价格",
+                        "name": "price",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/rent/publish": {
+            "post": {
+                "description": "发布房屋租售信息",
+                "tags": [
+                    "房屋租售模块"
+                ],
+                "summary": "publishHouse",
+                "parameters": [
+                    {
+                        "description": "房屋租售结构体",
+                        "name": "houseRent",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.HouseSaleRent"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/sale/all": {
+            "get": {
+                "description": "获取全部的售房信息",
+                "tags": [
+                    "房屋租售模块"
+                ],
+                "summary": "Sale",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/sale/delete": {
+            "get": {
+                "description": "根据ID删除房屋",
+                "tags": [
+                    "房屋租售模块"
+                ],
+                "summary": "DeleteHouseRentSale",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "房屋主键ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/sale/editprice": {
+            "get": {
+                "description": "修改房屋价格",
+                "tags": [
+                    "房屋租售模块"
+                ],
+                "summary": "editHousePrice",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "房屋唯一ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "新的房屋价格",
+                        "name": "price",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/sale/publish": {
+            "post": {
+                "description": "发布房屋租售信息",
+                "tags": [
+                    "房屋租售模块"
+                ],
+                "summary": "publishHouse",
+                "parameters": [
+                    {
+                        "description": "房屋租售结构体",
+                        "name": "houseRent",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.HouseSaleRent"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/allhouse": {
+            "get": {
+                "description": "获取某个用户发布的房源信息",
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "allHouse",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "账号",
+                        "name": "username",
                         "in": "query",
                         "required": true
                     }
@@ -1138,38 +1257,6 @@
                 }
             }
         },
-        "model.EditHouse": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "description": "房屋地址",
-                    "type": "string"
-                },
-                "hr_type": {
-                    "description": "房屋类型 租还是售",
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "message": {
-                    "description": "房屋信息",
-                    "type": "string"
-                },
-                "phone": {
-                    "description": "联系方式",
-                    "type": "string"
-                },
-                "price": {
-                    "description": "房屋价格",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "发布者",
-                    "type": "string"
-                }
-            }
-        },
         "model.HouseKeeping": {
             "type": "object",
             "properties": {
@@ -1198,15 +1285,17 @@
                 }
             }
         },
-        "model.HouseRentSale": {
+        "model.HouseSaleRent": {
             "type": "object",
             "properties": {
                 "address": {
                     "description": "房屋地址",
                     "type": "string"
                 },
-                "hr_type": {
-                    "description": "房屋类型 租还是售",
+                "area": {
+                    "type": "string"
+                },
+                "floor": {
                     "type": "string"
                 },
                 "id": {
@@ -1216,12 +1305,21 @@
                     "description": "房屋信息",
                     "type": "string"
                 },
+                "orientation": {
+                    "type": "string"
+                },
                 "phone": {
                     "description": "联系方式",
                     "type": "string"
                 },
                 "price": {
                     "description": "房屋价格",
+                    "type": "string"
+                },
+                "ruzhu": {
+                    "type": "string"
+                },
+                "t": {
                     "type": "string"
                 },
                 "username": {
