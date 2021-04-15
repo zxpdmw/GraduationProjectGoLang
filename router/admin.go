@@ -11,7 +11,7 @@ func AdminRouters(e *gin.Engine) {
 	group := e.Group("/admin")
 	{
 		group.GET("/", indexPage)
-		group.GET("login", adminLogin)
+		group.GET("/login", adminLogin)
 		group.GET("/notice", getAllNotice)
 		group.GET("/housekeeping", getAllHouseKeeping)
 		group.GET("/complainrepair", getAllComplainRepair)

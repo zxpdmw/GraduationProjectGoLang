@@ -329,6 +329,35 @@ func editPhone(c *gin.Context) {
 	})
 }
 
+func allhouse(c *gin.Context) {
+	username := c.Query("username")
+	rent, err := model.GetRentByUsername(username)
+	if err != nil {
+		c.JSON(http.StatusOK, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	sale, err := model.GetSaleByUsername(username)
+	if err != nil {
+		c.JSON(http.StatusOK, util.Response{
+			Code:    555,
+			Message: util.RequestFail,
+			Data:    nil,
+		})
+		return
+	}
+	rent = append(rent, sale...)
+
+	c.JSON(200, util.Response{
+		Code:    666,
+		Message: util.RequestSuccess,
+		Data:    rent,
+	})
+}
+
 func UserRouters(engine *gin.Engine) {
 	group := engine.Group("/user")
 	{
@@ -342,5 +371,6 @@ func UserRouters(engine *gin.Engine) {
 		group.GET("/editaddress", editAddress)
 		group.GET("/editphone", editPhone)
 		group.GET("/editnickname", editNickname)
+		group.GET("/allhouse", allhouse)
 	}
 }

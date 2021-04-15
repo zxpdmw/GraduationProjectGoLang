@@ -69,7 +69,8 @@ func main() {
 	router.UserRouters(server)
 	router.NoticeRouters(server)
 	router.HousekeepingRouters(server)
-	router.HouseRentingRouters(server)
+	router.HouseRentRouters(server)
+	router.HouseSaleRouters(server)
 	router.PropertyRouters(server)
 	router.ComplainRepairRouters(server)
 	server.NoRoute(func(context *gin.Context) {
