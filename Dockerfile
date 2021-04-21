@@ -1,4 +1,0 @@
-FROM golang:alpine
-
-
-
