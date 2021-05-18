@@ -1,9 +1,9 @@
 db:
-  username: zxpdmw
-  password: Zxpdmw520
-  ip: rm-2zeqer8186x8o6hi9vo.mysql.rds.aliyuncs.com
+  username: zxp
+  password: 520..zwy
+  ip: sh-cynosdbmysql-grp-3qhlhce4.sql.tencentcdb.com
   dbname: graduationproject
-  port: 3306
+  port: 20998
 
 server:
   port: 8080

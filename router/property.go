@@ -60,7 +60,6 @@ func payProperty(c *gin.Context) {
 		})
 		return
 	}
-
 	err = model.PayProperty(float32(data), query)
 	if err != nil {
 		c.JSON(200, util.Response{
@@ -70,7 +69,6 @@ func payProperty(c *gin.Context) {
 		})
 		return
 	}
-
 	id, err := model.GetPropertyByHouseId(query)
 	if err != nil {
 		c.JSON(200, util.Response{
@@ -80,7 +78,6 @@ func payProperty(c *gin.Context) {
 		})
 		return
 	}
-
 	c.JSON(200, util.Response{
 		Code:    666,
 		Message: util.PropertySuccess,
